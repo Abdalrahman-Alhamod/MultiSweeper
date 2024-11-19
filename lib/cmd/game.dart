@@ -55,14 +55,16 @@ class Game {
       Random random = Random();
       int randomX = random.nextInt(grid.getColumnCount());
       int randomY = random.nextInt(grid.getRowsCount());
-      if (!grid.getCell(randomX, randomY).isMined()) {
+      if (!grid.getCell(randomX, randomY).isMined) {
         grid.getCell(randomX, randomY).plantMine();
         plantedMines--;
         grid.runOnAdjacentCells(
           randomX,
           randomY,
           (cell) {
-            cell.incrementAdjacentMinesCount();
+            if (!cell.isMined) {
+              cell.incrementAdjacentMinesCount();
+            }
           },
         );
       }
@@ -78,9 +80,9 @@ class Game {
       return;
     }
     Cell currentCell = grid.getCell(x, y);
-    if (currentCell.isClosed()) {
+    if (currentCell.isClosed) {
       currentCell.open();
-      if (currentCell.isMined()) {
+      if (currentCell.isMined) {
         endGame(win: false);
       } else {
         saveCellsOpenedCount++;
@@ -91,7 +93,7 @@ class Game {
         if (checkWin()) {
           endGame(win: true);
         }
-        if (currentCell.isEmpty()) {
+        if (currentCell.isEmpty) {
           openCell(x + 1, y);
           openCell(x - 1, y);
           openCell(x, y + 1);
@@ -110,10 +112,10 @@ class Game {
       return;
     }
     Cell currentCell = grid.getCell(x, y);
-    if (currentCell.isClosed()) {
+    if (currentCell.isClosed) {
       currentCell.flag();
       usedFlagsCount--;
-    } else if (currentCell.isFlagged()) {
+    } else if (currentCell.isFlagged) {
       currentCell.close();
       usedFlagsCount++;
     }
@@ -124,17 +126,17 @@ class Game {
       return;
     }
     Cell currentCell = grid.getCell(x, y);
-    if (currentCell.isOpened()) {
+    if (currentCell.isOpened) {
       int flaggedCellsCount = grid.getAdjacentFlaggedCellsCount(x, y);
-      if (flaggedCellsCount == currentCell.adjacentMinesCount()) {
+      if (flaggedCellsCount == currentCell.adjacentMinesCount) {
         grid.runOnAdjacentCells(
           x,
           y,
           (cell) {
-            if (cell.isFlagged() && !cell.isMined()) {
+            if (cell.isFlagged && !cell.isMined) {
               endGame(win: false);
             }
-            if (cell.isClosed()) {
+            if (cell.isClosed) {
               cell.open();
             }
           },

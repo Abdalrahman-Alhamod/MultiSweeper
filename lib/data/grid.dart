@@ -70,7 +70,7 @@ class Grid {
       x,
       y,
       (cell) {
-        if (cell.isFlagged()) {
+        if (cell.isFlagged) {
           flaggedCellsCount++;
         }
       },
@@ -87,21 +87,21 @@ class Grid {
     String board = "";
     runOnCells(
       (cell) {
-        if (cell.isMined()) {
-          if (cell.isClosed()) {
+        if (cell.isMined) {
+          if (cell.isClosed) {
             board += "\$ "; // normal mine
-          } else if (cell.isFlagged()) {
+          } else if (cell.isFlagged) {
             board += "P ";
-          } else if (cell.isOpened()) {
+          } else if (cell.isOpened) {
             board += "* "; // blown mine
           }
         } else {
-          if (cell.isClosed()) {
+          if (cell.isClosed) {
             board += "# ";
-          } else if (cell.isFlagged()) {
+          } else if (cell.isFlagged) {
             board += "X "; // false flag place
-          } else if (cell.isOpened()) {
-            board += "${cell.adjacentMinesCount()} ";
+          } else if (cell.isOpened) {
+            board += "${cell.adjacentMinesCount} ";
           }
         }
         if (_isLastInRowCell(cell)) {
@@ -116,12 +116,12 @@ class Grid {
     String board = "";
     runOnCells(
       (cell) {
-        if (cell.isClosed()) {
+        if (cell.isClosed) {
           board += "# ";
-        } else if (cell.isFlagged()) {
+        } else if (cell.isFlagged) {
           board += "P ";
-        } else if (cell.isOpened()) {
-          board += "${cell.adjacentMinesCount()} ";
+        } else if (cell.isOpened) {
+          board += "${cell.adjacentMinesCount} ";
         }
         if (_isLastInRowCell(cell)) {
           board += '\n';

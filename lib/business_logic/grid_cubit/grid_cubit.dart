@@ -46,9 +46,9 @@ class GridCubit extends Cubit<GridState> {
       return;
     }
     Cell currentCell = grid.getCell(x, y);
-    if (currentCell.isClosed()) {
+    if (currentCell.isClosed) {
       currentCell.open();
-      if (currentCell.isMined()) {
+      if (currentCell.isMined) {
         grid.revealMines = true;
         isGameOver = true;
         emit(GameOver(win: false));
@@ -64,7 +64,7 @@ class GridCubit extends Cubit<GridState> {
           emit(GameOver(win: true));
           return;
         }
-        if (currentCell.isEmpty()) {
+        if (currentCell.isEmpty) {
           _openCell(x + 1, y);
           _openCell(x - 1, y);
           _openCell(x, y + 1);
@@ -91,7 +91,7 @@ class GridCubit extends Cubit<GridState> {
       Random random = Random();
       int randomX = random.nextInt(grid.getColumnCount());
       int randomY = random.nextInt(grid.getRowsCount());
-      if (!grid.getCell(randomX, randomY).isMined() &&
+      if (!grid.getCell(randomX, randomY).isMined &&
           (randomX != x || randomY != y)) {
         grid.getCell(randomX, randomY).plantMine();
         plantedMines--;
@@ -99,7 +99,9 @@ class GridCubit extends Cubit<GridState> {
           randomX,
           randomY,
           (cell) {
-            cell.incrementAdjacentMinesCount();
+            if (!cell.isMined) {
+              cell.incrementAdjacentMinesCount();
+            }
           },
         );
       }
@@ -117,10 +119,10 @@ class GridCubit extends Cubit<GridState> {
       return;
     }
     Cell currentCell = grid.getCell(x, y);
-    if (currentCell.isClosed()) {
+    if (currentCell.isClosed) {
       currentCell.flag();
       usedFlagsCount++;
-    } else if (currentCell.isFlagged()) {
+    } else if (currentCell.isFlagged) {
       currentCell.close();
       usedFlagsCount--;
     }
@@ -141,16 +143,16 @@ class GridCubit extends Cubit<GridState> {
       return;
     }
     Cell currentCell = grid.getCell(x, y);
-    if (currentCell.isOpened()) {
+    if (currentCell.isOpened) {
       int flaggedCellsCount = grid.getAdjacentFlaggedCellsCount(x, y);
-      if (flaggedCellsCount == currentCell.adjacentMinesCount()) {
+      if (flaggedCellsCount == currentCell.adjacentMinesCount) {
         grid.runOnAdjacentCells(
           x,
           y,
           (cell) {
-            if (cell.isClosed()) {
+            if (cell.isClosed) {
               cell.open();
-              if (cell.isMined()) {
+              if (cell.isMined) {
                 grid.revealMines = true;
                 isGameOver = true;
                 emit(GameOver(win: false));

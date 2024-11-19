@@ -49,7 +49,7 @@ class CellWidget extends StatelessWidget {
                     ),
                   )
                 : null,
-            color: cell.isMined() && cell.isOpened() && isMinesReveled
+            color: cell.isMined && cell.isOpened && isMinesReveled
                 ? Colors.red
                 : _getOnPressedAction(context) == null
                     ? disabledColor
@@ -65,11 +65,11 @@ class CellWidget extends StatelessWidget {
     if (isGameOver) {
       return null;
     }
-    if (cell.isClosed()) {
+    if (cell.isClosed) {
       return () => context.read<GridCubit>().openCell(position: cell.position);
-    } else if (cell.isOpened() && !cell.isEmpty()) {
+    } else if (cell.isOpened && !cell.isEmpty) {
       return () => context.read<GridCubit>().chordCell(position: cell.position);
-    } else if (cell.isFlagged()) {
+    } else if (cell.isFlagged) {
       return () {};
     }
     return null;
@@ -79,48 +79,48 @@ class CellWidget extends StatelessWidget {
     if (isGameOver) {
       return null;
     }
-    if (cell.isClosed() || cell.isFlagged()) {
+    if (cell.isClosed || cell.isFlagged) {
       return () => context.read<GridCubit>().flagCell(position: cell.position);
     }
     return null;
   }
 
   Widget _getReveledCellContent() {
-    if (cell.isMined()) {
-      if (cell.isClosed()) {
+    if (cell.isMined) {
+      if (cell.isClosed) {
         return const CellIcon(
           icon: AppImages.mine,
         ); // normal mine
-      } else if (cell.isFlagged()) {
+      } else if (cell.isFlagged) {
         return const CellIcon(
           icon: AppImages.flag,
         );
-      } else if (cell.isOpened()) {
+      } else if (cell.isOpened) {
         return const CellIcon(
           icon: AppImages.mine,
         ); // blown mine
       }
     } else {
-      if (cell.isClosed()) {
+      if (cell.isClosed) {
         return const SizedBox();
-      } else if (cell.isFlagged()) {
+      } else if (cell.isFlagged) {
         return const CellIcon(
           icon: AppImages.wrongFlag,
         ); // false flag place
-      } else if (cell.isOpened() && !cell.isEmpty()) {
+      } else if (cell.isOpened && !cell.isEmpty) {
         return Center(
           child: Text(
-            '${cell.adjacentMinesCount()}',
+            '${cell.adjacentMinesCount}',
             style: TextStyle(
               color: _getDigitColor(
-                cell.adjacentMinesCount(),
+                cell.adjacentMinesCount,
               ),
               fontSize: 24,
               fontFamily: AppFonts.minesweeper,
             ),
           ),
         );
-      } else if (cell.isOpened() && cell.isEmpty()) {
+      } else if (cell.isOpened && cell.isEmpty) {
         return const SizedBox();
       }
     }
@@ -128,20 +128,20 @@ class CellWidget extends StatelessWidget {
   }
 
   Widget _getNormalCellContent() {
-    if (cell.isOpened() && !cell.isEmpty()) {
+    if (cell.isOpened && !cell.isEmpty) {
       return Center(
         child: Text(
-          '${cell.adjacentMinesCount()}',
+          '${cell.adjacentMinesCount}',
           style: TextStyle(
             color: _getDigitColor(
-              cell.adjacentMinesCount(),
+              cell.adjacentMinesCount,
             ),
             fontSize: 24,
             fontFamily: AppFonts.minesweeper,
           ),
         ),
       );
-    } else if (cell.isFlagged()) {
+    } else if (cell.isFlagged) {
       return const CellIcon(
         icon: AppImages.flag,
       );

@@ -1,66 +1,50 @@
+import 'package:minesweeper/data/cell_content.dart';
 import 'package:minesweeper/data/cell_status.dart';
 import 'package:minesweeper/data/position.dart';
 
 class Cell {
-  int _value;
+  int _adjacentMinesCount;
   CellStatus _status;
   final Position _position;
+  CellContent _content;
 
   Cell({required Position position})
       : _position = position,
-        _value = 0,
+        _adjacentMinesCount = 0,
+        _content = CellContent.empty,
         _status = CellStatus.closed;
 
   @override
   String toString() {
-    return _value.toString();
+    return _adjacentMinesCount.toString();
   }
 
-  bool isMined() {
-    return _value == -1;
-  }
+  bool get isMined => _content == CellContent.mine;
 
-  void plantMine() {
-    _value = -1;
-  }
+  bool get isEmpty => _content == CellContent.empty;
 
-  bool isEmpty() {
-    return _value == 0;
-  }
+  bool get isClosed => _status == CellStatus.closed;
 
-  bool isClosed() {
-    return _status == CellStatus.closed;
-  }
+  bool get isOpened => _status == CellStatus.opened;
 
-  bool isOpened() {
-    return _status == CellStatus.opened;
-  }
+  bool get isFlagged => _status == CellStatus.flagged;
 
-  bool isFlagged() {
-    return _status == CellStatus.flagged;
-  }
+  int get adjacentMinesCount => _adjacentMinesCount;
 
-  void close() {
-    _status = CellStatus.closed;
-  }
+  void plantMine() => _content = CellContent.mine;
 
-  void open() {
-    _status = CellStatus.opened;
-  }
+  void close() => _status = CellStatus.closed;
 
-  void flag() {
-    _status = CellStatus.flagged;
-  }
+  void open() => _status = CellStatus.opened;
 
-  int adjacentMinesCount() {
-    return _value;
-  }
+  void flag() => _status = CellStatus.flagged;
 
   void incrementAdjacentMinesCount() {
-    if (isMined()) {
-      return;
+    assert(_content != CellContent.mine, "Cannot increment mined cell");
+    if (_content == CellContent.empty) {
+      _content = CellContent.number;
     }
-    _value++;
+    _adjacentMinesCount++;
   }
 
   Position get position => _position;
