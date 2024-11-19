@@ -15,13 +15,13 @@ class Game {
   Grid grid;
 
   Game({
-    required int rowsNumber,
-    required int columnNumber,
+    required int rowsCount,
+    required int columnsCount,
     required this.minesCount,
   })  : isFirstCellOpened = false,
         usedFlagsCount = minesCount,
         saveCellsOpenedCount = 0,
-        grid = Grid(rowsNumber: rowsNumber, columnsNumber: columnNumber);
+        grid = Grid(rowsCount: rowsCount, columnsCount: columnsCount);
 
   void run() {
     while (true) {
@@ -53,8 +53,8 @@ class Game {
     int plantedMines = minesCount;
     while (plantedMines > 0) {
       Random random = Random();
-      int randomX = random.nextInt(grid.getColumnCount());
-      int randomY = random.nextInt(grid.getRowsCount());
+      int randomX = random.nextInt(grid.columnsCount);
+      int randomY = random.nextInt(grid.rowsCount);
       if (!grid.getCell(randomX, randomY).isMined) {
         grid.getCell(randomX, randomY).plantMine();
         plantedMines--;

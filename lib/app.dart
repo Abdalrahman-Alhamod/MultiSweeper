@@ -12,8 +12,8 @@ class MinesweeperApp extends StatelessWidget {
     return BlocProvider(
       create: (context) => GridCubit()
         ..init(
-          rowsNumber: 12,
-          columnsNumber: 7,
+          rowsCount: 12,
+          columnsCount: 7,
           minesCount: 10,
         ),
       child: const MaterialApp(

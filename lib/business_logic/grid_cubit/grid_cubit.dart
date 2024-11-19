@@ -19,11 +19,11 @@ class GridCubit extends Cubit<GridState> {
   bool isGameOver = false;
 
   void init({
-    required int rowsNumber,
-    required int columnsNumber,
+    required int rowsCount,
+    required int columnsCount,
     required int minesCount,
   }) {
-    grid = Grid(rowsNumber: rowsNumber, columnsNumber: columnsNumber);
+    grid = Grid(rowsCount: rowsCount, columnsCount: columnsCount);
     this.minesCount = minesCount;
     emit(GridUpdate(grid, grid.revealMines, isGameOver));
   }
@@ -34,8 +34,8 @@ class GridCubit extends Cubit<GridState> {
     isFirstCellOpened = false;
     isGameOver = false;
     grid = Grid(
-      rowsNumber: grid.getRowsCount(),
-      columnsNumber: grid.getColumnCount(),
+      rowsCount: grid.rowsCount,
+      columnsCount: grid.columnsCount,
     );
     emit(GridUpdate(grid, grid.revealMines, isGameOver));
     emit(GameRestart());
@@ -89,8 +89,8 @@ class GridCubit extends Cubit<GridState> {
     int plantedMines = minesCount;
     while (plantedMines > 0) {
       Random random = Random();
-      int randomX = random.nextInt(grid.getColumnCount());
-      int randomY = random.nextInt(grid.getRowsCount());
+      int randomX = random.nextInt(grid.columnsCount);
+      int randomY = random.nextInt(grid.rowsCount);
       if (!grid.getCell(randomX, randomY).isMined &&
           (randomX != x || randomY != y)) {
         grid.getCell(randomX, randomY).plantMine();

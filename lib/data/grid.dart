@@ -3,18 +3,16 @@ import 'package:minesweeper/data/position.dart';
 
 class Grid {
   final List<List<Cell>> _cells;
-  int rowsNumber;
-  int columnsNumber;
   bool revealMines;
 
   Grid({
-    required this.rowsNumber,
-    required this.columnsNumber,
+    required int rowsCount,
+    required int columnsCount,
   })  : revealMines = false,
         _cells = List.generate(
-          rowsNumber,
+          rowsCount,
           (y) => List.generate(
-            columnsNumber,
+            columnsCount,
             (x) => Cell(
               position: Position(
                 x: x,
@@ -28,13 +26,9 @@ class Grid {
     return _cells[y][x];
   }
 
-  int getRowsCount() {
-    return rowsNumber;
-  }
+  int get rowsCount => _cells.length;
 
-  int getColumnCount() {
-    return columnsNumber;
-  }
+  int get columnsCount => _cells.first.length;
 
   // helper
   void runOnAdjacentCells(int x, int y, Function(Cell cell) function) {
@@ -60,7 +54,7 @@ class Grid {
 
   // helper
   bool isInsideGrid(int x, int y) {
-    return x >= 0 && x < columnsNumber && y >= 0 && y < rowsNumber;
+    return x >= 0 && x < columnsCount && y >= 0 && y < rowsCount;
   }
 
   // helper
@@ -80,7 +74,7 @@ class Grid {
 
   // helper
   bool _isLastInRowCell(Cell cell) {
-    return cell.position.x == columnsNumber - 1;
+    return cell.position.x == columnsCount - 1;
   }
 
   String _reveledBoard() {
@@ -132,7 +126,7 @@ class Grid {
   }
 
   int getCellsCount() {
-    return getColumnCount() * getRowsCount();
+    return columnsCount * rowsCount;
   }
 
   @override

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minesweeper/business_logic/grid_cubit/grid_cubit.dart';
@@ -16,8 +15,8 @@ class GridWidget extends StatelessWidget {
       builder: (context, state) {
         if (state is GridUpdate) {
           return GridLayout(
-            rowsCount: state.grid.getRowsCount(),
-            colsCount: state.grid.getColumnCount(),
+            rowsCount: state.grid.rowsCount,
+            colsCount: state.grid.columnsCount,
             colSpacing: 5,
             rowSpacing: 5,
             builder: (x, y) {
