@@ -16,19 +16,16 @@ class Cell extends HiveObject {
   @HiveField(3)
   CellContent _content;
   @HiveField(4)
-  final List<Cell> _chordedCells;
-  @HiveField(5)
   int _actionId;
 
   Cell(this._adjacentMinesCount, this._content, this._position, this._status,
-      this._chordedCells, this._actionId);
+      this._actionId);
 
   Cell.fromPosition({required Position position})
       : _position = position,
         _adjacentMinesCount = 0,
         _content = CellContent.empty,
         _status = CellStatus.closed,
-        _chordedCells = [],
         _actionId = -1;
 
   @override
@@ -48,22 +45,13 @@ class Cell extends HiveObject {
 
   int get adjacentMinesCount => _adjacentMinesCount;
 
-  List<Cell> get chordedCells => _chordedCells;
-
   bool get isProcessed => _actionId != -1;
 
-  int get actionId {
-    // assert(_actionId != -1, "The current cell is not processed yet");
-    return _actionId;
-  }
+  int get actionId => _actionId;
 
   set actionId(int actionId) {
     assert(actionId >= 0, "Action id connot be negative");
     _actionId = actionId;
-  }
-
-  void addChordedCell(Cell cell) {
-    _chordedCells.add(cell);
   }
 
   set adjacentMinesCount(int adjacentMinesCount) {

@@ -21,15 +21,14 @@ class CellAdapter extends TypeAdapter<Cell> {
       fields[3] as CellContent,
       fields[2] as Position,
       fields[1] as CellStatus,
-      (fields[4] as List).cast<Cell>(),
-      fields[5] as int,
+      fields[4] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, Cell obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj._adjacentMinesCount)
       ..writeByte(1)
@@ -39,8 +38,6 @@ class CellAdapter extends TypeAdapter<Cell> {
       ..writeByte(3)
       ..write(obj._content)
       ..writeByte(4)
-      ..write(obj._chordedCells)
-      ..writeByte(5)
       ..write(obj._actionId);
   }
 

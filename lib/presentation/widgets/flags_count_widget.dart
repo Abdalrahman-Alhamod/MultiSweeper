@@ -22,12 +22,9 @@ class _FlagsCountWidgetState extends State<FlagsCountWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<GridCubit, GridState>(
       builder: (context, state) {
-        if (state is FlagsCountUpdate) {
+        if (state is GridUpdate) {
           _flagsCount = state.flagsCount;
         }
-        int minesCount = context.read<GridCubit>().minesCount;
-        int usedFlagsCount = context.read<GridCubit>().usedFlagsCount;
-        _flagsCount = minesCount - usedFlagsCount;
         return SevenSegmentDisplay(
           value: getFomattedFlagsCount(),
           size: 4,

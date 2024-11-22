@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minesweeper/business_logic/grid_cubit/grid_cubit.dart';
 import 'package:minesweeper/data/cell.dart';
-import 'package:minesweeper/data/grid_action.dart';
-import 'package:minesweeper/data/grid_action_type.dart';
+import 'package:minesweeper/data/chord_action.dart';
+import 'package:minesweeper/data/flag_action.dart';
+import 'package:minesweeper/data/open_action.dart';
 import 'package:minesweeper/helpers/app_font.dart';
 import 'package:minesweeper/helpers/app_images.dart';
 
@@ -68,21 +69,13 @@ class CellWidget extends StatelessWidget {
       return null;
     }
     if (cell.isClosed) {
-      // return () => context.read<GridCubit>().openCell(position: cell.position);
-      return () => context.read<GridCubit>().execute(
-            action: GridAction(
-              actionType: GridActionType.open,
-              position: cell.position,
-            ),
-          );
+      return () => context
+          .read<GridCubit>()
+          .execute(action: OpenAction(position: cell.position));
     } else if (cell.isOpened && !cell.isEmpty) {
-      // return () => context.read<GridCubit>().chordCell(position: cell.position);
-      return () => context.read<GridCubit>().execute(
-            action: GridAction(
-              actionType: GridActionType.chord,
-              position: cell.position,
-            ),
-          );
+      return () => context
+          .read<GridCubit>()
+          .execute(action: ChordAction(position: cell.position));
     } else if (cell.isFlagged) {
       return () {};
     }
@@ -94,13 +87,9 @@ class CellWidget extends StatelessWidget {
       return null;
     }
     if (cell.isClosed || cell.isFlagged) {
-      // return () => context.read<GridCubit>().flagCell(position: cell.position);
-      return () => context.read<GridCubit>().execute(
-            action: GridAction(
-              actionType: GridActionType.flag,
-              position: cell.position,
-            ),
-          );
+      return () => context
+          .read<GridCubit>()
+          .execute(action: FlagAction(position: cell.position));
     }
     return null;
   }

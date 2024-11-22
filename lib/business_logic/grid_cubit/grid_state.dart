@@ -9,12 +9,8 @@ final class GridUpdate extends GridState {
   final Grid grid;
   final bool isMinesReveled;
   final bool isGameOver;
-  GridUpdate(this.grid, this.isMinesReveled, this.isGameOver);
-}
-
-final class FlagsCountUpdate extends GridState {
   final int flagsCount;
-  FlagsCountUpdate({required this.flagsCount});
+  GridUpdate(this.grid, this.isMinesReveled, this.isGameOver, this.flagsCount);
 }
 
 final class GameStart extends GridState {}
