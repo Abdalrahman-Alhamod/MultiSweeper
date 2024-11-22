@@ -17,6 +17,9 @@ class _TimerWidgetState extends State<TimerWidget> {
   // ignore: unused_field
   Timer? _timer;
   void _startTimer() {
+    if (_timer?.isActive ?? false) {
+      return;
+    }
     const oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(
       oneSec,

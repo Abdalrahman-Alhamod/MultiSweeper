@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:minesweeper/presentation/widgets/emojie_widget.dart';
 import 'package:minesweeper/presentation/widgets/flags_count_widget.dart';
 import 'package:minesweeper/presentation/widgets/grid_widget.dart';
+import 'package:minesweeper/presentation/widgets/redo_widget.dart';
 import 'package:minesweeper/presentation/widgets/timer_widget.dart';
+import 'package:minesweeper/presentation/widgets/undo_widget.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -17,7 +19,6 @@ class HomeView extends StatelessWidget {
             Stack(
               alignment: Alignment.center,
               children: [
-                Center(child: EmojieWidget()),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -28,6 +29,20 @@ class HomeView extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(right: 10),
                       child: TimerWidget(),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      child: UndoWidget(),
+                    ),
+                    EmojieWidget(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      child: RedoWidget(),
                     ),
                   ],
                 ),

@@ -7,21 +7,21 @@ import 'package:minesweeper/data/cell.dart';
 
 import '../data/grid.dart';
 
-class Game {
+class GameConsole {
   int minesCount;
   int usedFlagsCount;
   int saveCellsOpenedCount;
   bool isFirstCellOpened;
   Grid grid;
 
-  Game({
+  GameConsole({
     required int rowsCount,
     required int columnsCount,
     required this.minesCount,
   })  : isFirstCellOpened = false,
         usedFlagsCount = minesCount,
         saveCellsOpenedCount = 0,
-        grid = Grid(rowsCount: rowsCount, columnsCount: columnsCount);
+        grid = Grid.generate(rowsCount: rowsCount, columnsCount: columnsCount);
 
   void run() {
     while (true) {

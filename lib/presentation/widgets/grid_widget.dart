@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minesweeper/business_logic/grid_cubit/grid_cubit.dart';
+import 'package:minesweeper/helpers/logger.dart';
 import 'package:minesweeper/presentation/widgets/cell_widget.dart';
 
 class GridWidget extends StatelessWidget {
@@ -32,7 +33,7 @@ class GridWidget extends StatelessWidget {
       },
       listener: (context, state) {
         if (state is GridUpdate) {
-          debugPrint(state.grid.toString());
+          logger.print(state.grid, color: PrintColor.pink, title: "Grid");
         }
         if (state is GameOver) {
           if (state.win) {

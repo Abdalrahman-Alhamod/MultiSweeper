@@ -1,11 +1,19 @@
+import 'package:hive/hive.dart';
 import 'package:minesweeper/data/cell.dart';
 import 'package:minesweeper/data/position.dart';
+part 'grid.g.dart';
 
-class Grid {
+@HiveType(typeId: 0)
+class Grid extends HiveObject {
+  @HiveField(0)
   final List<List<Cell>> _cells;
+
+  @HiveField(1)
   bool revealMines;
 
-  Grid({
+  Grid(this._cells, this.revealMines);
+
+  Grid.generate({
     required int rowsCount,
     required int columnsCount,
   })  : revealMines = false,
@@ -13,7 +21,7 @@ class Grid {
           rowsCount,
           (y) => List.generate(
             columnsCount,
-            (x) => Cell(
+            (x) => Cell.fromPosition(
               position: Position(
                 x: x,
                 y: y,
@@ -70,6 +78,21 @@ class Grid {
       },
     );
     return flaggedCellsCount;
+  }
+
+  // helper
+  int getAdjacentMinedCellsCount(int x, int y) {
+    int minedCellsCount = 0;
+    runOnAdjacentCells(
+      x,
+      y,
+      (cell) {
+        if (cell.isMined) {
+          minedCellsCount++;
+        }
+      },
+    );
+    return minedCellsCount;
   }
 
   // helper

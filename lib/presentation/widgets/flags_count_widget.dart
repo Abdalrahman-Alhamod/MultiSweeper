@@ -42,7 +42,7 @@ class _FlagsCountWidgetState extends State<FlagsCountWidget> {
     if (s.length == 1) {
       s = s.padLeft(3, '0');
     } else if (s.length == 2) {
-      s = s.padLeft(2, '0');
+      s = s.padLeft(4, '0');
     }
     return s;
   }
