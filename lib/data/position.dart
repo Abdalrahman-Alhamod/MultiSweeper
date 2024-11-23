@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 
 part 'position.g.dart';
 
-@HiveType(typeId: 3)
+@HiveType(typeId: 4)
 class Position extends HiveObject {
   @HiveField(0)
   final int x;
@@ -11,14 +11,14 @@ class Position extends HiveObject {
 
   Position({required this.x, required this.y});
 
-   @override
- bool operator ==(Object other) =>
-  identical(this, other) ||
-  other is Position &&
-  runtimeType == other.runtimeType &&
-  x == other.x &&
-  y == other.y;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Position &&
+          runtimeType == other.runtimeType &&
+          x == other.x &&
+          y == other.y;
 
- @override
- int get hashCode => x.hashCode ^ y.hashCode;
+  @override
+  int get hashCode => x.hashCode ^ y.hashCode;
 }

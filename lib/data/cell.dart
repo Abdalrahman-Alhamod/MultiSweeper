@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:minesweeper/data/cell_content.dart';
 import 'package:minesweeper/data/cell_status.dart';
@@ -16,17 +15,26 @@ class Cell extends HiveObject {
   @HiveField(3)
   CellContent _content;
   @HiveField(4)
-  int _actionId;
+  String _actionId;
 
   Cell(this._adjacentMinesCount, this._content, this._position, this._status,
       this._actionId);
+
+  Cell.clone(Cell cell)
+      : this(
+          cell._adjacentMinesCount,
+          cell._content,
+          cell._position,
+          cell._status,
+          cell._actionId,
+        );
 
   Cell.fromPosition({required Position position})
       : _position = position,
         _adjacentMinesCount = 0,
         _content = CellContent.empty,
         _status = CellStatus.closed,
-        _actionId = -1;
+        _actionId = "";
 
   @override
   String toString() {
@@ -45,12 +53,12 @@ class Cell extends HiveObject {
 
   int get adjacentMinesCount => _adjacentMinesCount;
 
-  bool get isProcessed => _actionId != -1;
+  bool get isProcessed => _actionId != "";
 
-  int get actionId => _actionId;
+  String get actionId => _actionId;
 
-  set actionId(int actionId) {
-    assert(actionId >= 0, "Action id connot be negative");
+  set actionId(String actionId) {
+    assert(actionId.isNotEmpty, "Action id connot be empty");
     _actionId = actionId;
   }
 
@@ -86,7 +94,6 @@ class Cell extends HiveObject {
   void decrementAdjacentMinesCount() {
     assert(_content != CellContent.mine, "Cannot decrement mined cell");
     if (isEmpty) {
-      debugPrint("#### Decrement Empty Cell");
       return;
     }
     _adjacentMinesCount--;

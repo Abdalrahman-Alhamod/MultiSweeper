@@ -4,11 +4,14 @@ import 'package:minesweeper/business_logic/grid_cubit/grid_cubit.dart';
 import 'package:minesweeper/helpers/logger.dart';
 import 'package:minesweeper/presentation/widgets/cell_widget.dart';
 
+import '../../helpers/show_custom_dialog.dart';
+
 class GridWidget extends StatelessWidget {
   const GridWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    context.read<GridCubit>().updateGrid();
     return BlocConsumer<GridCubit, GridState>(
       buildWhen: (previous, current) {
         return previous != current && current is GridUpdate;
@@ -29,7 +32,7 @@ class GridWidget extends StatelessWidget {
             },
           );
         }
-        return const SizedBox();
+        return const Placeholder();
       },
       listener: (context, state) {
         if (state is GridUpdate) {
@@ -42,20 +45,6 @@ class GridWidget extends StatelessWidget {
             showCustomDialog(context, "Game Over", "You have lost!");
           }
         }
-      },
-    );
-  }
-
-  Future<dynamic> showCustomDialog(
-      BuildContext context, String title, String message) {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return SimpleDialog(
-          contentPadding: const EdgeInsets.all(24),
-          title: Text(title),
-          children: [Text(message)],
-        );
       },
     );
   }

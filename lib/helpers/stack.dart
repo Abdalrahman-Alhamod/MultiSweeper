@@ -1,5 +1,8 @@
-class DStack<E> {
-  final _stack = <E>[];
+import 'package:hive/hive.dart';
+
+class DStack<E> extends HiveObject {
+  final List<E> _stack;
+  DStack.empty() : _stack = <E>[];
 
   void push(E value) => _stack.add(value);
 

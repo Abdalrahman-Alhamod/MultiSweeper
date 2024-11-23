@@ -1,79 +1,30 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minesweeper/business_logic/grid_cubit/grid_cubit.dart';
 import 'package:segment_display/segment_display.dart';
 
-class TimerWidget extends StatefulWidget {
+import '../../helpers/date_time_helper.dart';
+
+class TimerWidget extends StatelessWidget {
   const TimerWidget({super.key});
 
   @override
-  State<TimerWidget> createState() => _TimerWidgetState();
-}
-
-class _TimerWidgetState extends State<TimerWidget> {
-  int _current = 0;
-  // ignore: unused_field
-  Timer? _timer;
-  void _startTimer() {
-    if (_timer?.isActive ?? false) {
-      return;
-    }
-    const oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        {
-          setState(() {
-            _current++;
-          });
-        }
-      },
-    );
-  }
-
-  String _formatHHMMSS(int seconds) {
-    int hours = (seconds / 3600).truncate();
-    seconds = (seconds % 3600).truncate();
-    int minutes = (seconds / 60).truncate();
-
-    String hoursStr = (hours).toString().padLeft(2, '0');
-    String minutesStr = (minutes).toString().padLeft(2, '0');
-    String secondsStr = (seconds % 60).toString().padLeft(2, '0');
-
-    if (hours == 0) {
-      return "$minutesStr:$secondsStr";
-    }
-
-    return "$hoursStr:$minutesStr:$secondsStr";
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BlocListener<GridCubit, GridState>(
-      listenWhen: (previous, current) {
-        return previous != current &&
-            (current is GameStart ||
-                current is GameOver ||
-                current is GameRestart);
+    int time = 0;
+    context.read<GridCubit>().updateTimer();
+    return BlocBuilder<GridCubit, GridState>(
+      buildWhen: (previous, current) {
+        return previous != current && current is GameTimeUpdate;
       },
-      listener: (context, state) {
-        if (state is GameStart) {
-          _startTimer();
-        } else if (state is GameOver) {
-          _timer?.cancel();
-        } else if (state is GameRestart) {
-          _timer?.cancel();
-          setState(() {
-            _current = 0;
-          });
+      builder: (context, state) {
+        if (state is GameTimeUpdate) {
+          time = state.time;
         }
+        return SevenSegmentDisplay(
+          value: DateTimeHelper.formatHHMMSS(time),
+          size: 4,
+        );
       },
-      child: SevenSegmentDisplay(
-        value: _formatHHMMSS(_current),
-        size: 4,
-      ),
     );
   }
 }

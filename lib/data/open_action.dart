@@ -43,6 +43,8 @@ class OpenAction extends GridAction {
         if (!game.isFirstCellOpened) {
           game.isFirstCellOpened = true;
           game.plantMines(exludedPosition: Position(x: x, y: y));
+        }
+        if (!game.isGameStarted) {
           game.start();
         }
         if (game.checkWin()) {

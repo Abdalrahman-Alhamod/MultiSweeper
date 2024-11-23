@@ -2,7 +2,7 @@
 import 'package:hive/hive.dart';
 
 part 'cell_content.g.dart';
-@HiveType(typeId: 4)
+@HiveType(typeId: 3)
 enum CellContent {
   @HiveField(0)
   empty,

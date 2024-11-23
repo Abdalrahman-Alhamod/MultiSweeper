@@ -13,6 +13,20 @@ class Grid extends HiveObject {
 
   Grid(this._cells, this.revealMines);
 
+  Grid.clone(Grid grid) : this(grid._clonedCells, grid.revealMines);
+
+  List<List<Cell>> get _clonedCells {
+    List<List<Cell>> clonedCells;
+    clonedCells = List.generate(
+      rowsCount,
+      (y) => List.generate(
+        columnsCount,
+        (x) => Cell.clone(_cells.elementAt(y).elementAt(x)),
+      ),
+    );
+    return clonedCells;
+  }
+
   Grid.generate({
     required int rowsCount,
     required int columnsCount,

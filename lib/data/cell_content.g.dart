@@ -8,7 +8,7 @@ part of 'cell_content.dart';
 
 class CellContentAdapter extends TypeAdapter<CellContent> {
   @override
-  final int typeId = 4;
+  final int typeId = 3;
 
   @override
   CellContent read(BinaryReader reader) {

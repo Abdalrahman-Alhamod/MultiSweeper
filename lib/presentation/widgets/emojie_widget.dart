@@ -8,6 +8,9 @@ class EmojieWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color? topBorderColor = Colors.grey[100];
+    Color? bottomBorderColor = Colors.grey[500];
+    double borderWidth = 4;
     return BlocBuilder<GridCubit, GridState>(
       buildWhen: (previous, current) {
         return previous != current &&
@@ -18,14 +21,38 @@ class EmojieWidget extends StatelessWidget {
         if (state is GameOver && !state.win) {
           imagePath = AppImages.sad;
         }
-        return IconButton(
-          onPressed: () {
-            context.read<GridCubit>().restart();
-          },
-          icon: Image.asset(
-            imagePath,
-            width: 50,
-            height: 50,
+        return Material(
+          child: InkWell(
+            onTap: () => context.read<GridCubit>().restart(),
+            child: Ink(
+              padding: const EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    width: borderWidth,
+                    color: topBorderColor!,
+                  ),
+                  left: BorderSide(
+                    width: borderWidth,
+                    color: topBorderColor,
+                  ),
+                  right: BorderSide(
+                    width: borderWidth,
+                    color: bottomBorderColor!,
+                  ),
+                  bottom: BorderSide(
+                    width: borderWidth,
+                    color: bottomBorderColor,
+                  ),
+                ),
+                color: Colors.grey[400],
+              ),
+              child: Image.asset(
+                imagePath,
+                width: 36,
+                height: 36,
+              ),
+            ),
           ),
         );
       },

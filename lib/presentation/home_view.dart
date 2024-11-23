@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:minesweeper/presentation/widgets/emojie_widget.dart';
 import 'package:minesweeper/presentation/widgets/flags_count_widget.dart';
 import 'package:minesweeper/presentation/widgets/grid_widget.dart';
+import 'package:minesweeper/presentation/widgets/load_widget.dart';
 import 'package:minesweeper/presentation/widgets/redo_widget.dart';
+import 'package:minesweeper/presentation/widgets/save_widget.dart';
 import 'package:minesweeper/presentation/widgets/timer_widget.dart';
 import 'package:minesweeper/presentation/widgets/undo_widget.dart';
 
@@ -16,37 +18,41 @@ class HomeView extends StatelessWidget {
       body: const SafeArea(
         child: Column(
           children: [
-            Stack(
-              alignment: Alignment.center,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: FlagsCountWidget(),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 10),
-                      child: TimerWidget(),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5),
-                      child: UndoWidget(),
-                    ),
-                    EmojieWidget(),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5),
-                      child: RedoWidget(),
-                    ),
-                  ],
-                ),
+                SaveWidget(),
+                UndoWidget(),
+                RedoWidget(),
+                LoadWidget(),
               ],
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 4),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: FlagsCountWidget(),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: TimerWidget(),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      EmojieWidget(),
+                    ],
+                  ),
+                ],
+              ),
             ),
             Expanded(
               child: GridWidget(),

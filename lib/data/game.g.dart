@@ -1,44 +1,50 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'cell.dart';
+part of 'game.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CellAdapter extends TypeAdapter<Cell> {
+class GameAdapter extends TypeAdapter<Game> {
   @override
-  final int typeId = 1;
+  final int typeId = 5;
 
   @override
-  Cell read(BinaryReader reader) {
+  Game read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Cell(
-      fields[0] as int,
-      fields[3] as CellContent,
-      fields[2] as Position,
-      fields[1] as CellStatus,
-      fields[4] as String,
+    return Game(
+      fields[0] as Grid,
+      fields[1] as int,
+      fields[2] as int,
+      fields[3] as int,
+      fields[4] as bool,
+      fields[5] as bool,
+      fields[6] as int,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Cell obj) {
+  void write(BinaryWriter writer, Game obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(7)
       ..writeByte(0)
-      ..write(obj._adjacentMinesCount)
+      ..write(obj.grid)
       ..writeByte(1)
-      ..write(obj._status)
+      ..write(obj.minesCount)
       ..writeByte(2)
-      ..write(obj._position)
+      ..write(obj.usedFlagsCount)
       ..writeByte(3)
-      ..write(obj._content)
+      ..write(obj.saveCellsOpenedCount)
       ..writeByte(4)
-      ..write(obj._actionId);
+      ..write(obj.isFirstCellOpened)
+      ..writeByte(5)
+      ..write(obj.isGameOver)
+      ..writeByte(6)
+      ..write(obj.time);
   }
 
   @override
@@ -47,7 +53,7 @@ class CellAdapter extends TypeAdapter<Cell> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CellAdapter &&
+      other is GameAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

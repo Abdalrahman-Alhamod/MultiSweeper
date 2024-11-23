@@ -7,4 +7,5 @@ abstract final class AppImages {
   static const mine = '$mainPath/mine.png';
   static const flag = '$mainPath/flag.png';
   static const wrongFlag = '$mainPath/wrong_flag.png';
+  static const grid = '$mainPath/grid.jpg';
 }
