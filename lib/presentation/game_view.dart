@@ -1,61 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:minesweeper/presentation/widgets/emojie_widget.dart';
-import 'package:minesweeper/presentation/widgets/flags_count_widget.dart';
-import 'package:minesweeper/presentation/widgets/grid_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minesweeper/business_logic/game_cubit/game_cubit.dart';
 import 'package:minesweeper/presentation/widgets/load_widget.dart';
-import 'package:minesweeper/presentation/widgets/redo_widget.dart';
 import 'package:minesweeper/presentation/widgets/save_widget.dart';
-import 'package:minesweeper/presentation/widgets/timer_widget.dart';
-import 'package:minesweeper/presentation/widgets/undo_widget.dart';
+
+import 'widgets/game_widget.dart';
 
 class GameView extends StatelessWidget {
   const GameView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final games = context.read<GameCubit>().games;
     return Scaffold(
       backgroundColor: Colors.grey[400],
-      body: const SafeArea(
+      body: SafeArea(
         child: Column(
           children: [
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SaveWidget(),
-                UndoWidget(),
-                RedoWidget(),
                 LoadWidget(),
               ],
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 4),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 10),
-                        child: FlagsCountWidget(),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(right: 10),
-                        child: TimerWidget(),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      EmojieWidget(),
-                    ],
-                  ),
-                ],
-              ),
-            ),
             Expanded(
-              child: GridWidget(),
+              child: BlocBuilder<GameCubit, GameState>(
+                buildWhen: (previous, current) {
+                  return previous != current && current is GameAdd;
+                },
+                builder: (context, state) {
+                  return ListView.builder(
+                    itemCount: games.length,
+                    itemBuilder: (context, index) => GameWidget(
+                      gameId: games[index].id,
+                      isLastElement: index == games.length - 1,
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),

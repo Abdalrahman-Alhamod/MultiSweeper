@@ -3,39 +3,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minesweeper/business_logic/game_cubit/game_cubit.dart';
 import 'package:segment_display/segment_display.dart';
 
-class FlagsCountWidget extends StatefulWidget {
-  const FlagsCountWidget({super.key});
-
-  @override
-  State<FlagsCountWidget> createState() => _FlagsCountWidgetState();
-}
-
-class _FlagsCountWidgetState extends State<FlagsCountWidget> {
-  late int _flagsCount;
-  @override
-  void initState() {
-    super.initState();
-    _flagsCount = 0;
-  }
-
+class FlagsCountWidget extends StatelessWidget {
+  const FlagsCountWidget({super.key, required this.gameId});
+  final String gameId;
   @override
   Widget build(BuildContext context) {
+    int flagsCount = 0;
     return BlocBuilder<GameCubit, GameState>(
+      buildWhen: (previous, current) {
+        return previous != current &&
+            current is GameUpdate &&
+            current.gamdId == gameId;
+      },
       builder: (context, state) {
         if (state is GameUpdate) {
-          _flagsCount = state.flagsCount;
+          flagsCount = state.flagsCount;
         }
         return SevenSegmentDisplay(
-          value: getFomattedFlagsCount(),
-          size: 4,
+          value: getFomattedValue(flagsCount),
+          size: 3,
           characterCount: 3,
         );
       },
     );
   }
 
-  String getFomattedFlagsCount() {
-    String s = _flagsCount.toString();
+  String getFomattedValue(int value) {
+    String s = value.toString();
     if (s.length == 1) {
       s = s.padLeft(3, '0');
     } else if (s.length == 2) {

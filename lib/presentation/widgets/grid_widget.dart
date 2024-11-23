@@ -4,17 +4,17 @@ import 'package:minesweeper/business_logic/game_cubit/game_cubit.dart';
 import 'package:minesweeper/helpers/logger.dart';
 import 'package:minesweeper/presentation/widgets/cell_widget.dart';
 
-import '../../helpers/show_custom_dialog.dart';
-
 class GridWidget extends StatelessWidget {
-  const GridWidget({super.key});
-
+  const GridWidget({super.key, required this.gameId});
+  final String gameId;
   @override
   Widget build(BuildContext context) {
-    context.read<GameCubit>().updateGrid();
+    context.read<GameCubit>().updateGrid(gameId);
     return BlocConsumer<GameCubit, GameState>(
       buildWhen: (previous, current) {
-        return previous != current && current is GameUpdate;
+        return previous != current &&
+            current is GameUpdate &&
+            current.gamdId == gameId;
       },
       builder: (context, state) {
         if (state is GameUpdate) {
@@ -28,22 +28,28 @@ class GridWidget extends StatelessWidget {
                 cell: state.grid.getCell(x, y),
                 isMinesReveled: state.isMinesReveled,
                 isGameOver: state.isGameOver,
+                gameId: gameId,
               );
             },
           );
         }
         return const Placeholder();
       },
+      listenWhen: (previous, current) {
+        return previous != current &&
+            ((current is GameUpdate && current.gamdId == gameId) ||
+                (current is GameOver && current.gamdId == gameId));
+      },
       listener: (context, state) {
         if (state is GameUpdate) {
           logger.print(state.grid, color: PrintColor.pink, title: "Grid");
         }
         if (state is GameOver) {
-          if (state.win) {
-            showCustomDialog(context, "Congrats", "You have won!");
-          } else {
-            showCustomDialog(context, "Game Over", "You have lost!");
-          }
+          // if (state.win) {
+          //   showCustomDialog(context, "Congrats", "You have won!");
+          // } else {
+          //   showCustomDialog(context, "Game Over", "You have lost!");
+          // }
         }
       },
     );

@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../business_logic/game_cubit/game_cubit.dart';
 
 class RedoWidget extends StatelessWidget {
-  const RedoWidget({super.key});
-
+  const RedoWidget({super.key, required this.gameId});
+  final String gameId;
   @override
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () {
-        context.read<GameCubit>().redo();
+        context.read<GameCubit>().redo(gameId);
       },
       icon: const Icon(
         Icons.redo,

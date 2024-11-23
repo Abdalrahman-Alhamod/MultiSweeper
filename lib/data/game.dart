@@ -23,6 +23,8 @@ class Game extends HiveObject {
   bool isGameOver;
   @HiveField(6)
   int time;
+  @HiveField(7)
+  String id;
   Timer? _timer;
   bool isGameStarted;
   DStack<GridAction> previousActions;
@@ -42,6 +44,7 @@ class Game extends HiveObject {
     this.isFirstCellOpened,
     this.isGameOver,
     this.time,
+    this.id,
   )   : onLose = (() {}),
         onRestart = (() {}),
         onStart = (() {}),
@@ -61,6 +64,7 @@ class Game extends HiveObject {
           game.isFirstCellOpened,
           game.isGameOver,
           game.time,
+          game.id,
         );
 
   Game.init({
@@ -73,6 +77,7 @@ class Game extends HiveObject {
     required this.onLose,
     required this.onUpdate,
     required this.onTimeUpdate,
+    required this.id,
   })  : grid = Grid.generate(rowsCount: rowsCount, columnsCount: columnsCount),
         previousActions = DStack.empty(),
         nextActions = DStack.empty(),
@@ -189,6 +194,7 @@ class Game extends HiveObject {
     time = 0;
     _cancelTimer();
     onRestart.call();
+    onTimeUpdate.call();
   }
 
   void start() {
@@ -214,7 +220,12 @@ class Game extends HiveObject {
 
   void incrementTimer() {
     time++;
-    onTimeUpdate.call();
+    if (time > 999) {
+      endWithLoss();
+      update();
+    } else {
+      onTimeUpdate.call();
+    }
   }
 
   void update() {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minesweeper/helpers/app_font.dart';
 import 'package:minesweeper/helpers/show_custom_dialog.dart';
 import 'package:minesweeper/helpers/show_loading_dialog.dart';
 
@@ -33,9 +34,23 @@ class SaveWidget extends StatelessWidget {
         onPressed: () {
           context.read<GameCubit>().saveGame();
         },
-        icon: const Icon(
-          Icons.save,
-          size: 40,
+        icon: const Row(
+          children: [
+            Icon(
+              Icons.save,
+              size: 40,
+            ),
+            SizedBox(
+              width: 20,
+            ),
+            Text(
+              "Save Game",
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: AppFonts.minesweeper,
+              ),
+            ),
+          ],
         ),
       ),
     );

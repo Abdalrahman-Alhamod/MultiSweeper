@@ -10,7 +10,7 @@ part 'game_state.dart';
 class GameCubit extends Cubit<GameState> {
   GameCubit() : super(GameInitial());
 
-  late Game _game;
+  late List<Game> games;
   final GameSaveService _gameSaveService = GameSaveService();
 
   void init({
@@ -18,76 +18,98 @@ class GameCubit extends Cubit<GameState> {
     required int columnsCount,
     required int minesCount,
   }) {
-    _game = Game.init(
-      columnsCount: columnsCount,
-      rowsCount: rowsCount,
-      minesCount: minesCount,
+    games = [];
+    addGame();
+  }
+
+  void addGame() {
+    String gameId = uuid.v4();
+    Game game = Game.init(
+      columnsCount: 7,
+      rowsCount: 12,
+      minesCount: 10,
       onUpdate: () {
-        emit(
-          GameUpdate(
-            _game.grid,
-            _game.grid.revealMines,
-            _game.isGameOver,
-            _game.flagsCount,
-          ),
-        );
+        updateGrid(gameId);
       },
       onStart: () {
         emit(
-          GameStart(),
+          GameStart(gameId),
         );
       },
       onWin: () {
         emit(
-          GameOver(win: true),
+          GameOver(win: true, gameId),
         );
       },
       onLose: () {
         emit(
-          GameOver(win: false),
+          GameOver(win: false, gameId),
         );
       },
       onRestart: () {
         emit(
-          GameRestart(),
+          GameRestart(gameId),
         );
       },
       onTimeUpdate: () {
-        emit(
-          GameTimeUpdate(
-            _game.time,
-          ),
-        );
+        updateTimer(gameId);
       },
+      id: gameId,
     );
-    _game.update();
+    games.add(game);
+    game.update();
+    emit(GameAdd());
   }
 
-  void restart() {
-    _game.restart();
+  Game _getGameFromId(String gameId) {
+    return games.firstWhere((game) => game.id == gameId);
   }
 
-  void execute({required GridAction action}) {
-    _game.execute(action: action);
+  void restart(String gameId) {
+    Game game = _getGameFromId(gameId);
+    game.restart();
   }
 
-  void undo() {
-    _game.undo();
+  void execute({required GridAction action, required String gameId}) {
+    Game game = _getGameFromId(gameId);
+    game.execute(action: action);
   }
 
-  void redo() {
-    _game.redo();
+  void undo(String gameId) {
+    Game game = _getGameFromId(gameId);
+    game.undo();
+  }
+
+  void redo(String gameId) {
+    Game game = _getGameFromId(gameId);
+    game.redo();
+  }
+
+  void updateTimer(String gameId) {
+    Game game = _getGameFromId(gameId);
+    emit(GameTimeUpdate(game.time, gameId));
+  }
+
+  void updateGrid(String gameId) {
+    Game game = _getGameFromId(gameId);
+    emit(
+      GameUpdate(
+        game.grid,
+        game.grid.revealMines,
+        game.isGameOver,
+        game.flagsCount,
+        gameId,
+      ),
+    );
   }
 
   void saveGame() async {
-    if (!_game.isGameOver) {
-      emit(GameSaveLoading());
-      try {
-        await _gameSaveService.saveGame(_game, "MySave");
-        emit(GameSaveSuccess());
-      } catch (e) {
-        emit(GameSaveFailure(error: e.toString()));
-      }
+    emit(GameSaveLoading());
+    try {
+      await _gameSaveService.saveGames(games, "MySave");
+      emit(GameSaveSuccess());
+    } catch (e) {
+      emit(GameSaveFailure(error: e.toString()));
     }
   }
 
@@ -103,63 +125,51 @@ class GameCubit extends Cubit<GameState> {
         emit(GameLoadFailure(error: "Save not found!"));
       } else {
         try {
-          _game.dispose();
+          for (Game game in games) {
+            game.dispose();
+          }
         } catch (_) {}
-        _game = loadedGame.game;
-        _game = Game.clone(_game);
-        _game.setOnActions(
-          onUpdate: () {
-            emit(
-              GameUpdate(
-                _game.grid,
-                _game.grid.revealMines,
-                _game.isGameOver,
-                _game.flagsCount,
-              ),
-            );
-          },
-          onStart: () {
-            emit(
-              GameStart(),
-            );
-          },
-          onWin: () {
-            emit(
-              GameOver(win: true),
-            );
-          },
-          onLose: () {
-            emit(
-              GameOver(win: false),
-            );
-          },
-          onRestart: () {
-            emit(
-              GameRestart(),
-            );
-          },
-          onTimeUpdate: () {
-            emit(
-              GameTimeUpdate(
-                _game.time,
-              ),
-            );
-          },
-        );
-        _game.resetActionsStacks();
+        games = [];
+        final loadedGames = loadedGame.games;
+        for (Game game in loadedGames) {
+          game = Game.clone(game);
+          final gameId = game.id;
+          game.setOnActions(
+            onUpdate: () {
+              updateGrid(gameId);
+            },
+            onStart: () {
+              emit(
+                GameStart(gameId),
+              );
+            },
+            onWin: () {
+              emit(
+                GameOver(win: true, gameId),
+              );
+            },
+            onLose: () {
+              emit(
+                GameOver(win: false, gameId),
+              );
+            },
+            onRestart: () {
+              emit(
+                GameRestart(gameId),
+              );
+            },
+            onTimeUpdate: () {
+              updateTimer(gameId);
+            },
+          );
+          game.resetActionsStacks();
+          games.add(game);
+        }
         emit(GameLoadSuccess());
       }
     } catch (e) {
       emit(GameLoadFailure(error: e.toString()));
     }
-  }
-
-  void updateTimer() {
-    emit(GameTimeUpdate(_game.time));
-  }
-
-  void updateGrid() {
-    _game.update();
   }
 
   void deleteGame({required String id}) async {

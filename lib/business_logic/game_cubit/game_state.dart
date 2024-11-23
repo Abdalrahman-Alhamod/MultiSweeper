@@ -6,6 +6,7 @@ sealed class GameState {}
 final class GameInitial extends GameState {}
 
 final class GameUpdate extends GameState {
+  final String gamdId;
   final Grid grid;
   final bool isMinesReveled;
   final bool isGameOver;
@@ -15,21 +16,32 @@ final class GameUpdate extends GameState {
     this.isMinesReveled,
     this.isGameOver,
     this.flagsCount,
+    this.gamdId,
   );
 }
 
-final class GameStart extends GameState {}
+final class GameStart extends GameState {
+  final String gamdId;
 
-final class GameRestart extends GameState {}
+  GameStart(this.gamdId);
+}
+
+final class GameRestart extends GameState {
+  final String gamdId;
+
+  GameRestart(this.gamdId);
+}
 
 final class GameTimeUpdate extends GameState {
   final int time;
-  GameTimeUpdate(this.time);
+  final String gamdId;
+  GameTimeUpdate(this.time, this.gamdId);
 }
 
 final class GameOver extends GameState {
   final bool win;
-  GameOver({required this.win});
+  final String gamdId;
+  GameOver(this.gamdId, {required this.win});
 }
 
 final class GameSaveLoading extends GameState {}
@@ -59,3 +71,5 @@ final class GameDeleteFailure extends GameState {
 
   GameDeleteFailure({required this.error});
 }
+
+final class GameAdd extends GameState {}

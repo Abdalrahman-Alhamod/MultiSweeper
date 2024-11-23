@@ -17,7 +17,7 @@ class GameSaveAdapter extends TypeAdapter<GameSave> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return GameSave(
-      game: fields[0] as Game,
+      games: (fields[0] as List).cast<Game>(),
       date: fields[1] as DateTime,
       name: fields[2] as String,
       id: fields[3] as String,
@@ -29,7 +29,7 @@ class GameSaveAdapter extends TypeAdapter<GameSave> {
     writer
       ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.game)
+      ..write(obj.games)
       ..writeByte(1)
       ..write(obj.date)
       ..writeByte(2)

@@ -15,7 +15,9 @@ class CellWidget extends StatelessWidget {
     required this.cell,
     this.isMinesReveled = false,
     required this.isGameOver,
+    required this.gameId,
   });
+  String gameId;
   Cell cell;
   final bool isMinesReveled;
   final bool isGameOver;
@@ -69,13 +71,15 @@ class CellWidget extends StatelessWidget {
       return null;
     }
     if (cell.isClosed) {
-      return () => context
-          .read<GameCubit>()
-          .execute(action: OpenAction(position: cell.position));
+      return () => context.read<GameCubit>().execute(
+            action: OpenAction(position: cell.position),
+            gameId: gameId,
+          );
     } else if (cell.isOpened && !cell.isEmpty) {
-      return () => context
-          .read<GameCubit>()
-          .execute(action: ChordAction(position: cell.position));
+      return () => context.read<GameCubit>().execute(
+            action: ChordAction(position: cell.position),
+            gameId: gameId,
+          );
     } else if (cell.isFlagged) {
       return () {};
     }
@@ -87,9 +91,10 @@ class CellWidget extends StatelessWidget {
       return null;
     }
     if (cell.isClosed || cell.isFlagged) {
-      return () => context
-          .read<GameCubit>()
-          .execute(action: FlagAction(position: cell.position));
+      return () => context.read<GameCubit>().execute(
+            action: FlagAction(position: cell.position),
+            gameId: gameId,
+          );
     }
     return null;
   }

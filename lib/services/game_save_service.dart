@@ -35,9 +35,14 @@ class GameSaveService {
     return _gameSaveBox.values.toList();
   }
 
-  Future<void> saveGame(Game game, String name) async {
+  Future<void> saveGames(List<Game> games, String name) async {
     GameSave save = GameSave(
-      game: Game.clone(game),
+      games: List.generate(
+        games.length,
+        (index) => Game.clone(
+          games[index],
+        ),
+      ),
       date: DateTime.now(),
       name: name,
       id: uuid.v4(),
