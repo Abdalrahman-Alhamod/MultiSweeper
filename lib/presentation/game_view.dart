@@ -8,8 +8,8 @@ import 'package:minesweeper/presentation/widgets/save_widget.dart';
 import 'package:minesweeper/presentation/widgets/timer_widget.dart';
 import 'package:minesweeper/presentation/widgets/undo_widget.dart';
 
-class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+class GameView extends StatelessWidget {
+  const GameView({super.key});
 
   @override
   Widget build(BuildContext context) {

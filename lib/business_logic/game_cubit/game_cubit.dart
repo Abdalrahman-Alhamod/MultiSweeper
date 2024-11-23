@@ -5,10 +5,10 @@ import 'package:minesweeper/data/grid.dart';
 import 'package:minesweeper/data/grid_action.dart';
 import 'package:minesweeper/services/game_save_service.dart';
 import '../../data/game.dart';
-part 'grid_state.dart';
+part 'game_state.dart';
 
-class GridCubit extends Cubit<GridState> {
-  GridCubit() : super(GridInitial());
+class GameCubit extends Cubit<GameState> {
+  GameCubit() : super(GameInitial());
 
   late Game _game;
   final GameSaveService _gameSaveService = GameSaveService();
@@ -24,7 +24,7 @@ class GridCubit extends Cubit<GridState> {
       minesCount: minesCount,
       onUpdate: () {
         emit(
-          GridUpdate(
+          GameUpdate(
             _game.grid,
             _game.grid.revealMines,
             _game.isGameOver,
@@ -110,7 +110,7 @@ class GridCubit extends Cubit<GridState> {
         _game.setOnActions(
           onUpdate: () {
             emit(
-              GridUpdate(
+              GameUpdate(
                 _game.grid,
                 _game.grid.revealMines,
                 _game.isGameOver,

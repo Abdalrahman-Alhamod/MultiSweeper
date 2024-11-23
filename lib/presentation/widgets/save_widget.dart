@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minesweeper/helpers/show_custom_dialog.dart';
 import 'package:minesweeper/helpers/show_loading_dialog.dart';
 
-import '../../business_logic/grid_cubit/grid_cubit.dart';
+import '../../business_logic/game_cubit/game_cubit.dart';
 
 class SaveWidget extends StatelessWidget {
   const SaveWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<GridCubit, GridState>(
+    return BlocListener<GameCubit, GameState>(
       listenWhen: (previous, current) {
         return previous != current &&
             (current is GameSaveLoading ||
@@ -31,7 +31,7 @@ class SaveWidget extends StatelessWidget {
       },
       child: IconButton(
         onPressed: () {
-          context.read<GridCubit>().saveGame();
+          context.read<GameCubit>().saveGame();
         },
         icon: const Icon(
           Icons.save,

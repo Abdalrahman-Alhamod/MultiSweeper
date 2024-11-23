@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minesweeper/business_logic/grid_cubit/grid_cubit.dart';
+import 'package:minesweeper/business_logic/game_cubit/game_cubit.dart';
 import 'package:minesweeper/helpers/logger.dart';
 import 'package:minesweeper/presentation/widgets/cell_widget.dart';
 
@@ -11,13 +11,13 @@ class GridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<GridCubit>().updateGrid();
-    return BlocConsumer<GridCubit, GridState>(
+    context.read<GameCubit>().updateGrid();
+    return BlocConsumer<GameCubit, GameState>(
       buildWhen: (previous, current) {
-        return previous != current && current is GridUpdate;
+        return previous != current && current is GameUpdate;
       },
       builder: (context, state) {
-        if (state is GridUpdate) {
+        if (state is GameUpdate) {
           return GridLayout(
             rowsCount: state.grid.rowsCount,
             colsCount: state.grid.columnsCount,
@@ -35,7 +35,7 @@ class GridWidget extends StatelessWidget {
         return const Placeholder();
       },
       listener: (context, state) {
-        if (state is GridUpdate) {
+        if (state is GameUpdate) {
           logger.print(state.grid, color: PrintColor.pink, title: "Grid");
         }
         if (state is GameOver) {

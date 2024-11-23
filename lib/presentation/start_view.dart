@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minesweeper/business_logic/grid_cubit/grid_cubit.dart';
+import 'package:minesweeper/business_logic/game_cubit/game_cubit.dart';
 import 'package:minesweeper/helpers/app_images.dart';
 import 'package:minesweeper/helpers/custom_elevated_button.dart';
-import 'package:minesweeper/presentation/home_view.dart';
+import 'package:minesweeper/presentation/game_view.dart';
 import 'package:minesweeper/presentation/load_game_view.dart';
 
 class StartView extends StatelessWidget {
@@ -29,7 +29,7 @@ class StartView extends StatelessWidget {
               children: [
                 CustomElevatedButton(
                   onPressed: () async {
-                    context.read<GridCubit>().init(
+                    context.read<GameCubit>().init(
                           rowsCount: 12,
                           columnsCount: 7,
                           minesCount: 10,
@@ -37,7 +37,7 @@ class StartView extends StatelessWidget {
                     await Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const HomeView(),
+                        builder: (context) => const GameView(),
                       ),
                     );
                   },

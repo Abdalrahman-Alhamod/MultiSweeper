@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minesweeper/business_logic/grid_cubit/grid_cubit.dart';
+import 'package:minesweeper/business_logic/game_cubit/game_cubit.dart';
 import 'package:minesweeper/helpers/app_images.dart';
 
 class EmojieWidget extends StatelessWidget {
@@ -11,7 +11,7 @@ class EmojieWidget extends StatelessWidget {
     Color? topBorderColor = Colors.grey[100];
     Color? bottomBorderColor = Colors.grey[500];
     double borderWidth = 4;
-    return BlocBuilder<GridCubit, GridState>(
+    return BlocBuilder<GameCubit, GameState>(
       buildWhen: (previous, current) {
         return previous != current &&
             (current is GameOver || current is GameRestart);
@@ -23,7 +23,7 @@ class EmojieWidget extends StatelessWidget {
         }
         return Material(
           child: InkWell(
-            onTap: () => context.read<GridCubit>().restart(),
+            onTap: () => context.read<GameCubit>().restart(),
             child: Ink(
               padding: const EdgeInsets.all(2),
               decoration: BoxDecoration(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minesweeper/business_logic/grid_cubit/grid_cubit.dart';
+import 'package:minesweeper/business_logic/game_cubit/game_cubit.dart';
 import 'package:segment_display/segment_display.dart';
 
 class FlagsCountWidget extends StatefulWidget {
@@ -20,9 +20,9 @@ class _FlagsCountWidgetState extends State<FlagsCountWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GridCubit, GridState>(
+    return BlocBuilder<GameCubit, GameState>(
       builder: (context, state) {
-        if (state is GridUpdate) {
+        if (state is GameUpdate) {
           _flagsCount = state.flagsCount;
         }
         return SevenSegmentDisplay(

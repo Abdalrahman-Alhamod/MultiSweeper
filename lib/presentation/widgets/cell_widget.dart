@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minesweeper/business_logic/grid_cubit/grid_cubit.dart';
+import 'package:minesweeper/business_logic/game_cubit/game_cubit.dart';
 import 'package:minesweeper/data/cell.dart';
 import 'package:minesweeper/data/chord_action.dart';
 import 'package:minesweeper/data/flag_action.dart';
@@ -70,11 +70,11 @@ class CellWidget extends StatelessWidget {
     }
     if (cell.isClosed) {
       return () => context
-          .read<GridCubit>()
+          .read<GameCubit>()
           .execute(action: OpenAction(position: cell.position));
     } else if (cell.isOpened && !cell.isEmpty) {
       return () => context
-          .read<GridCubit>()
+          .read<GameCubit>()
           .execute(action: ChordAction(position: cell.position));
     } else if (cell.isFlagged) {
       return () {};
@@ -88,7 +88,7 @@ class CellWidget extends StatelessWidget {
     }
     if (cell.isClosed || cell.isFlagged) {
       return () => context
-          .read<GridCubit>()
+          .read<GameCubit>()
           .execute(action: FlagAction(position: cell.position));
     }
     return null;

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minesweeper/business_logic/grid_cubit/grid_cubit.dart';
+import 'package:minesweeper/business_logic/game_cubit/game_cubit.dart';
 import 'package:minesweeper/helpers/app_font.dart';
 import 'package:minesweeper/helpers/date_time_helper.dart';
 import 'package:minesweeper/helpers/show_loading_dialog.dart';
-import 'package:minesweeper/presentation/home_view.dart';
+import 'package:minesweeper/presentation/game_view.dart';
 
 import '../helpers/show_custom_dialog.dart';
 
@@ -13,7 +13,7 @@ class LoadGameView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<GridCubit, GridState>(
+    return BlocConsumer<GameCubit, GameState>(
       listenWhen: (previous, current) {
         return previous != current &&
             (current is GameLoadFailure ||
@@ -30,7 +30,7 @@ class LoadGameView extends StatelessWidget {
           await Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => const HomeView(),
+              builder: (context) => const GameView(),
             ),
             ModalRoute.withName('/'),
           );
@@ -48,7 +48,7 @@ class LoadGameView extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        final saves = context.read<GridCubit>().getAllGameSaves();
+        final saves = context.read<GameCubit>().getAllGameSaves();
         return Scaffold(
           appBar: AppBar(
             title: const Text(
@@ -78,11 +78,11 @@ class LoadGameView extends StatelessWidget {
                   style: const TextStyle(fontSize: 20),
                 ),
                 onTap: () {
-                  context.read<GridCubit>().loadGame(id: saves[index].id);
+                  context.read<GameCubit>().loadGame(id: saves[index].id);
                 },
                 trailing: IconButton(
                   onPressed: () {
-                    context.read<GridCubit>().deleteGame(id: saves[index].id);
+                    context.read<GameCubit>().deleteGame(id: saves[index].id);
                   },
                   icon: const Icon(
                     Icons.delete,

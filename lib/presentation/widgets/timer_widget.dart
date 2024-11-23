@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minesweeper/business_logic/grid_cubit/grid_cubit.dart';
+import 'package:minesweeper/business_logic/game_cubit/game_cubit.dart';
 import 'package:segment_display/segment_display.dart';
 
 import '../../helpers/date_time_helper.dart';
@@ -11,8 +11,8 @@ class TimerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int time = 0;
-    context.read<GridCubit>().updateTimer();
-    return BlocBuilder<GridCubit, GridState>(
+    context.read<GameCubit>().updateTimer();
+    return BlocBuilder<GameCubit, GameState>(
       buildWhen: (previous, current) {
         return previous != current && current is GameTimeUpdate;
       },
