@@ -12,8 +12,6 @@ A modern take on Minesweeper with exciting features and a clean, dynamic interfa
 
 ---
 
-## 📸 **Screenshots**
-
 ## 📸 **Gallery**
 
 ### Screenshots
