@@ -1,16 +1,9 @@
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:minesweeper/data/game.dart';
-part 'game_save.g.dart';
 
-@HiveType(typeId: 6)
 class GameSave {
-  @HiveField(0)
   final List<Game> games;
-  @HiveField(1)
   final DateTime date;
-  @HiveField(2)
   final String name;
-  @HiveField(3)
   final String id;
 
   GameSave({
@@ -19,4 +12,20 @@ class GameSave {
     required this.name,
     required this.id,
   });
+
+  Map<String, dynamic> toJson() => {
+        'games': games.map((game) => game.toJson()).toList(),
+        'date': date.toIso8601String(),
+        'name': name,
+        'id': id,
+      };
+
+  static GameSave fromJson(Map<String, dynamic> json) => GameSave(
+        games: (json['games'] as List<dynamic>)
+            .map((gameJson) => Game.fromJson(gameJson))
+            .toList(),
+        date: DateTime.parse(json['date']),
+        name: json['name'],
+        id: json['id'],
+      );
 }

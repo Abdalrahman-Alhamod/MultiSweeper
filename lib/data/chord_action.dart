@@ -6,7 +6,15 @@ import 'cell.dart';
 class ChordAction extends GridAction {
   ChordAction({
     required super.position,
+    super.id,
   });
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'id': super.id,
+        'position': position.toJson(),
+        'type': runtimeType.toString(),
+      };
 
   @override
   void redo({required Game game}) {

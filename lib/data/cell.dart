@@ -1,20 +1,12 @@
-import 'package:hive/hive.dart';
 import 'package:minesweeper/data/cell_content.dart';
 import 'package:minesweeper/data/cell_status.dart';
 import 'package:minesweeper/data/position.dart';
-part 'cell.g.dart';
 
-@HiveType(typeId: 1)
-class Cell extends HiveObject {
-  @HiveField(0)
+class Cell {
   int _adjacentMinesCount;
-  @HiveField(1)
   CellStatus _status;
-  @HiveField(2)
   final Position _position;
-  @HiveField(3)
   CellContent _content;
-  @HiveField(4)
   String _actionId;
 
   Cell(this._adjacentMinesCount, this._content, this._position, this._status,
@@ -103,4 +95,22 @@ class Cell extends HiveObject {
   }
 
   Position get position => _position;
+
+  Map<String, dynamic> toJson() => {
+        'adjacentMinesCount': _adjacentMinesCount,
+        'status': _status.toString(),
+        'position': _position.toJson(),
+        'content': _content.toString(),
+        'actionId': _actionId,
+      };
+
+  factory Cell.fromJson(Map<String, dynamic> json) {
+    return Cell(
+      json['adjacentMinesCount'],
+      CellContent.values.firstWhere((e) => e.toString() == json['content']),
+      Position.fromJson(json['position']),
+      CellStatus.values.firstWhere((e) => e.toString() == json['status']),
+      json['actionId'],
+    );
+  }
 }

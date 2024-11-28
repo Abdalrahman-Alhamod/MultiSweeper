@@ -1,9 +1,11 @@
-import 'package:hive_flutter/hive_flutter.dart';
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:minesweeper/data/game_save.dart';
 import 'package:minesweeper/data/grid_action.dart';
-import 'package:minesweeper/services/hive_service.dart';
 
 import '../data/game.dart';
+import '../main.dart';
 
 class GameSaveService {
   GameSaveService._internal();
@@ -12,37 +14,35 @@ class GameSaveService {
     return _singelton;
   }
 
-  final Box<GameSave> _gameSaveBox =
-      Hive.box<GameSave>(HiveService().savesBoxName);
+  final String _savesName = "saves";
+
+  Future<void> _saveGames(List<GameSave> gameSaves) async {
+    final saves = gameSaves.map((e) => e.toJson()).toList();
+    final result = await compute(jsonEncode, saves);
+    await prefs.setString(_savesName, result);
+  }
 
   Future<void> addGameSave(GameSave gameSave) async {
-    await _gameSaveBox.add(gameSave);
+    List<GameSave> saves = await getAllGameSaves();
+    saves.insert(0, gameSave);
+    await _saveGames(saves);
   }
 
-  GameSave? getGameSave(int index) {
-    return _gameSaveBox.getAt(index);
-  }
-
-  Future<void> updateGameSave(int index, GameSave gameSave) async {
-    await _gameSaveBox.putAt(index, gameSave);
-  }
-
-  Future<void> deleteGameSave(int index) async {
-    await _gameSaveBox.deleteAt(index);
-  }
-
-  List<GameSave> getAllGameSaves() {
-    return _gameSaveBox.values.toList();
+  Future<List<GameSave>> getAllGameSaves() async {
+    final savedData = prefs.getString(_savesName);
+    if (savedData == null || savedData.isEmpty) return [];
+    final saves = await compute(jsonDecode, savedData);
+    return (saves as List<dynamic>)
+        .map((element) => GameSave.fromJson(element))
+        .toList();
   }
 
   Future<void> saveGames(List<Game> games, String name) async {
+    if (games.isEmpty || name.trim().isEmpty) {
+      throw ArgumentError('Games list cannot be empty and name must be valid.');
+    }
     GameSave save = GameSave(
-      games: List.generate(
-        games.length,
-        (index) => Game.clone(
-          games[index],
-        ),
-      ),
+      games: games,
       date: DateTime.now(),
       name: name,
       id: uuid.v4(),
@@ -50,16 +50,14 @@ class GameSaveService {
     await addGameSave(save);
   }
 
-  GameSave? loadGame(String id) {
-    return _gameSaveBox.values.firstWhere((save) => save.id == id);
+  Future<GameSave?> loadGame(String id) async {
+    final saves = await getAllGameSaves();
+    return saves.firstWhere((save) => save.id == id);
   }
 
   Future<void> deleteGame(String id) async {
-    for (int i = 0; i < _gameSaveBox.length; i++) {
-      if (_gameSaveBox.getAt(i)?.id == id) {
-        await _gameSaveBox.deleteAt(i);
-        return;
-      }
-    }
+    List<GameSave> saves = await getAllGameSaves();
+    saves.removeWhere((save) => save.id == id);
+    await _saveGames(saves);
   }
 }

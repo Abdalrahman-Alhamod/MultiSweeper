@@ -113,13 +113,20 @@ class GameCubit extends Cubit<GameState> {
     }
   }
 
-  List<GameSave> getAllGameSaves() {
-    return _gameSaveService.getAllGameSaves().reversed.toList();
+  void getAllGameSaves() async {
+    emit(FetchAllSavedGamesLoading());
+    try {
+      final savedGames = await _gameSaveService.getAllGameSaves();
+      emit(FetchAllSavedGamesSuccess(savedGames));
+    } catch (e) {
+      emit(FetchAllSavedGamesFailure(error: e.toString()));
+    }
   }
 
-  void loadGame({required String id}) {
+  void loadGame({required String id}) async {
+    emit(GameLoadLoading());
     try {
-      GameSave? loadedGame = _gameSaveService.loadGame(id);
+      GameSave? loadedGame = await _gameSaveService.loadGame(id);
 
       if (loadedGame == null) {
         emit(GameLoadFailure(error: "Save not found!"));
@@ -132,7 +139,6 @@ class GameCubit extends Cubit<GameState> {
         games = [];
         final loadedGames = loadedGame.games;
         for (Game game in loadedGames) {
-          game = Game.clone(game);
           final gameId = game.id;
           game.setOnActions(
             onUpdate: () {
@@ -162,7 +168,6 @@ class GameCubit extends Cubit<GameState> {
               updateTimer(gameId);
             },
           );
-          game.resetActionsStacks();
           games.add(game);
         }
         emit(GameLoadSuccess());

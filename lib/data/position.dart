@@ -1,12 +1,5 @@
-import 'package:hive/hive.dart';
-
-part 'position.g.dart';
-
-@HiveType(typeId: 4)
-class Position extends HiveObject {
-  @HiveField(0)
+class Position {
   final int x;
-  @HiveField(1)
   final int y;
 
   Position({required this.x, required this.y});
@@ -21,4 +14,16 @@ class Position extends HiveObject {
 
   @override
   int get hashCode => x.hashCode ^ y.hashCode;
+
+  Map<String, dynamic> toJson() => {
+        'x': x,
+        'y': y,
+      };
+
+  factory Position.fromJson(Map<String, dynamic> json) {
+    return Position(
+      x: json['x'],
+      y: json['y'],
+    );
+  }
 }

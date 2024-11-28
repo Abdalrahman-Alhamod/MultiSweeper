@@ -1,106 +1,131 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:hive/hive.dart';
 import 'package:minesweeper/data/grid.dart';
 import 'package:minesweeper/data/grid_action.dart';
 import 'package:minesweeper/data/position.dart';
 import 'package:minesweeper/helpers/stack.dart';
-part 'game.g.dart';
 
-@HiveType(typeId: 5)
-class Game extends HiveObject {
-  @HiveField(0)
-  late Grid grid;
-  @HiveField(1)
-  int minesCount;
-  @HiveField(2)
+class Game {
+  late Grid _grid;
+  final int _minesCount;
   int usedFlagsCount;
-  @HiveField(3)
   int saveCellsOpenedCount;
-  @HiveField(4)
-  bool isFirstCellOpened;
-  @HiveField(5)
-  bool isGameOver;
-  @HiveField(6)
-  int time;
-  @HiveField(7)
-  String id;
+  bool _isFirstCellOpened;
+  bool _isGameOver;
+  int _time;
+  final String _id;
+  final DStack<GridAction> _previousActions;
+  final DStack<GridAction> _nextActions;
+  bool _isGameStarted;
   Timer? _timer;
-  bool isGameStarted;
-  DStack<GridAction> previousActions;
-  DStack<GridAction> nextActions;
-  void Function() onStart;
-  void Function() onRestart;
-  void Function() onWin;
-  void Function() onLose;
-  void Function() onUpdate;
-  void Function() onTimeUpdate;
+  void Function() _onStart;
+  void Function() _onRestart;
+  void Function() _onWin;
+  void Function() _onLose;
+  void Function() _onUpdate;
+  void Function() _onTimeUpdate;
+
+  Map<String, dynamic> toJson() => {
+        'grid': _grid.toJson(),
+        'minesCount': _minesCount,
+        'usedFlagsCount': usedFlagsCount,
+        'saveCellsOpenedCount': saveCellsOpenedCount,
+        'isFirstCellOpened': _isFirstCellOpened,
+        'isGameOver': _isGameOver,
+        'time': _time,
+        'id': _id,
+        'previousActions':
+            _previousActions.toJson((gridAction) => gridAction.toJson()),
+        'nextActions': _nextActions.toJson((gridAction) => gridAction.toJson()),
+      };
+
+  static Game fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return Game(
+      Grid.fromJson(json['grid']),
+      json['minesCount'],
+      json['usedFlagsCount'],
+      json['saveCellsOpenedCount'],
+      json['isFirstCellOpened'],
+      json['isGameOver'],
+      json['time'],
+      json['id'],
+      DStack.fromJson(
+          json['previousActions'], (json) => GridAction.fromJson(json)),
+      DStack.fromJson(json['nextActions'], (json) => GridAction.fromJson(json)),
+    );
+  }
 
   Game(
-    this.grid,
-    this.minesCount,
+    this._grid,
+    this._minesCount,
     this.usedFlagsCount,
     this.saveCellsOpenedCount,
-    this.isFirstCellOpened,
-    this.isGameOver,
-    this.time,
-    this.id,
-  )   : onLose = (() {}),
-        onRestart = (() {}),
-        onStart = (() {}),
-        onUpdate = (() {}),
-        onWin = (() {}),
-        onTimeUpdate = (() {}),
-        nextActions = DStack.empty(),
-        previousActions = DStack.empty(),
-        isGameStarted = false;
-
-  Game.clone(Game game)
-      : this(
-          Grid.clone(game.grid),
-          game.minesCount,
-          game.usedFlagsCount,
-          game.saveCellsOpenedCount,
-          game.isFirstCellOpened,
-          game.isGameOver,
-          game.time,
-          game.id,
-        );
+    this._isFirstCellOpened,
+    this._isGameOver,
+    this._time,
+    this._id,
+    this._previousActions,
+    this._nextActions,
+  )   : _onLose = (() {}),
+        _onRestart = (() {}),
+        _onStart = (() {}),
+        _onUpdate = (() {}),
+        _onWin = (() {}),
+        _onTimeUpdate = (() {}),
+        _isGameStarted = false;
 
   Game.init({
     required int rowsCount,
     required int columnsCount,
-    required this.minesCount,
-    required this.onStart,
-    required this.onRestart,
-    required this.onWin,
-    required this.onLose,
-    required this.onUpdate,
-    required this.onTimeUpdate,
-    required this.id,
-  })  : grid = Grid.generate(rowsCount: rowsCount, columnsCount: columnsCount),
-        previousActions = DStack.empty(),
-        nextActions = DStack.empty(),
+    required int minesCount,
+    required void Function() onStart,
+    required void Function() onRestart,
+    required void Function() onWin,
+    required void Function() onLose,
+    required void Function() onUpdate,
+    required void Function() onTimeUpdate,
+    required String id,
+  })  : _minesCount = minesCount,
+        _onTimeUpdate = onTimeUpdate,
+        _onUpdate = onUpdate,
+        _onLose = onLose,
+        _onWin = onWin,
+        _onRestart = onRestart,
+        _onStart = onStart,
+        _id = id,
+        _grid = Grid.generate(rowsCount: rowsCount, columnsCount: columnsCount),
+        _previousActions = DStack.empty(),
+        _nextActions = DStack.empty(),
         usedFlagsCount = 0,
         saveCellsOpenedCount = 0,
-        isGameOver = false,
-        isFirstCellOpened = false,
-        isGameStarted = false,
-        time = 0;
+        _isGameOver = false,
+        _isFirstCellOpened = false,
+        _isGameStarted = false,
+        _time = 0;
 
-  int get flagsCount => minesCount - usedFlagsCount;
+  int get flagsCount => _minesCount - usedFlagsCount;
 
-  void plantMines({required Position exludedPosition}) {
-    int plantedMines = minesCount;
+  int get time => _time;
+
+  String get id => _id;
+
+  bool get isGameOver => _isGameOver;
+
+  Grid get grid => _grid;
+
+  void _plantMines({required Position exludedPosition}) {
+    int plantedMines = _minesCount;
     while (plantedMines > 0) {
       Random random = Random();
-      int randomX = random.nextInt(grid.columnsCount);
-      int randomY = random.nextInt(grid.rowsCount);
-      if (!grid.getCell(randomX, randomY).isMined &&
+      int randomX = random.nextInt(_grid.columnsCount);
+      int randomY = random.nextInt(_grid.rowsCount);
+      if (!_grid.getCell(randomX, randomY).isMined &&
           (randomX != exludedPosition.x || randomY != exludedPosition.y)) {
-        grid.getCell(randomX, randomY).plantMine();
+        _grid.getCell(randomX, randomY).plantMine();
         plantedMines--;
-        grid.runOnAdjacentCells(
+        _grid.runOnAdjacentCells(
           randomX,
           randomY,
           (cell) {
@@ -113,6 +138,13 @@ class Game extends HiveObject {
     }
   }
 
+  void openFirstCell({required Position position}) {
+    if (!_isFirstCellOpened) {
+      _isFirstCellOpened = true;
+      _plantMines(exludedPosition: position);
+    }
+  }
+
   void setOnActions({
     required void Function() onStart,
     required void Function() onRestart,
@@ -121,86 +153,83 @@ class Game extends HiveObject {
     required void Function() onUpdate,
     required void Function() onTimeUpdate,
   }) {
-    this.onStart = onStart;
-    this.onRestart = onRestart;
-    this.onWin = onWin;
-    this.onLose = onLose;
-    this.onUpdate = onUpdate;
-    this.onTimeUpdate = onTimeUpdate;
-  }
-
-  void resetActionsStacks() {
-    previousActions.clear();
-    nextActions.clear();
+    _onStart = onStart;
+    _onRestart = onRestart;
+    _onWin = onWin;
+    _onLose = onLose;
+    _onUpdate = onUpdate;
+    _onTimeUpdate = onTimeUpdate;
   }
 
   void execute({required GridAction action}) {
     action.run(game: this);
-    nextActions.clear();
-    previousActions.push(action);
+    _nextActions.clear();
+    _previousActions.push(action);
     update();
   }
 
   void undo() {
-    if (previousActions.isEmpty || isGameOver) {
+    if (_previousActions.isEmpty || _isGameOver) {
       return;
     }
-    GridAction lastAction = previousActions.pop();
-    nextActions.push(lastAction);
+    GridAction lastAction = _previousActions.pop();
+    _nextActions.push(lastAction);
     lastAction.undo(game: this);
     update();
   }
 
   void redo() {
-    if (nextActions.isEmpty || isGameOver) {
+    if (_nextActions.isEmpty || _isGameOver) {
       return;
     }
-    GridAction nextAction = nextActions.pop();
-    previousActions.push(nextAction);
+    GridAction nextAction = _nextActions.pop();
+    _previousActions.push(nextAction);
     nextAction.redo(game: this);
     update();
   }
 
   bool checkWin() {
-    return saveCellsOpenedCount == (grid.getCellsCount() - minesCount);
+    return saveCellsOpenedCount == (_grid.getCellsCount() - _minesCount);
   }
 
   void endWithWin() {
-    isGameOver = true;
+    _isGameOver = true;
     _cancelTimer();
-    onWin.call();
+    _onWin.call();
   }
 
   void endWithLoss() {
-    grid.revealMines = true;
-    isGameOver = true;
+    _grid.revealMines = true;
+    _isGameOver = true;
     _cancelTimer();
-    onLose.call();
+    _onLose.call();
   }
 
   void restart() {
     usedFlagsCount = 0;
     saveCellsOpenedCount = 0;
-    isFirstCellOpened = false;
-    isGameOver = false;
-    grid = Grid.generate(
-      rowsCount: grid.rowsCount,
-      columnsCount: grid.columnsCount,
+    _isFirstCellOpened = false;
+    _isGameOver = false;
+    _grid = Grid.generate(
+      rowsCount: _grid.rowsCount,
+      columnsCount: _grid.columnsCount,
     );
-    previousActions.clear();
-    nextActions.clear();
+    _previousActions.clear();
+    _nextActions.clear();
     update();
-    isGameStarted = false;
-    time = 0;
+    _isGameStarted = false;
+    _time = 0;
     _cancelTimer();
-    onRestart.call();
-    onTimeUpdate.call();
+    _onRestart.call();
+    _onTimeUpdate.call();
   }
 
   void start() {
-    isGameStarted = true;
-    _startTimer();
-    onStart.call();
+    if (!_isGameStarted) {
+      _isGameStarted = true;
+      _startTimer();
+      _onStart.call();
+    }
   }
 
   void _startTimer() {
@@ -219,16 +248,16 @@ class Game extends HiveObject {
   }
 
   void incrementTimer() {
-    time++;
-    if (time > 999) {
+    _time++;
+    if (_time > 999) {
       endWithLoss();
       update();
     } else {
-      onTimeUpdate.call();
+      _onTimeUpdate.call();
     }
   }
 
   void update() {
-    onUpdate.call();
+    _onUpdate.call();
   }
 }

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:minesweeper/app.dart';
 import 'package:minesweeper/helpers/custom_bloc_observer.dart';
-import 'package:minesweeper/services/hive_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+late SharedPreferences prefs;
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = CustomBlocObserver();
-  await Hive.initFlutter("Minesweeper");
-  await HiveService().init();
+  prefs = await SharedPreferences.getInstance();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   runApp(
     const MinesweeperApp(),

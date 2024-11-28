@@ -7,7 +7,15 @@ import 'position.dart';
 class OpenAction extends GridAction {
   OpenAction({
     required super.position,
+    super.id,
   });
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'id': super.id,
+        'position': position.toJson(),
+        'type': runtimeType.toString(),
+      };
 
   @override
   void redo({required Game game}) {
@@ -16,6 +24,10 @@ class OpenAction extends GridAction {
 
   @override
   void run({required Game game}) {
+    Cell currentCell = game.grid.getCell(position.x, position.y);
+    if (currentCell.isClosed) {
+      game.start();
+    }
     _openCell(position.x, position.y, game);
   }
 
@@ -40,13 +52,7 @@ class OpenAction extends GridAction {
         game.endWithLoss();
       } else {
         game.saveCellsOpenedCount++;
-        if (!game.isFirstCellOpened) {
-          game.isFirstCellOpened = true;
-          game.plantMines(exludedPosition: Position(x: x, y: y));
-        }
-        if (!game.isGameStarted) {
-          game.start();
-        }
+        game.openFirstCell(position: Position(x: x, y: y));
         if (game.checkWin()) {
           game.endWithWin();
           return;

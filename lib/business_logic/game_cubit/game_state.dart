@@ -56,6 +56,8 @@ final class GameSaveFailure extends GameState {
 
 final class GameLoadSuccess extends GameState {}
 
+final class GameLoadLoading extends GameState {}
+
 final class GameLoadFailure extends GameState {
   final String error;
 
@@ -73,3 +75,17 @@ final class GameDeleteFailure extends GameState {
 }
 
 final class GameAdd extends GameState {}
+
+final class FetchAllSavedGamesSuccess extends GameState {
+  final List<GameSave> savedGames;
+
+  FetchAllSavedGamesSuccess(this.savedGames);
+}
+
+final class FetchAllSavedGamesLoading extends GameState {}
+
+final class FetchAllSavedGamesFailure extends GameState {
+  final String error;
+
+  FetchAllSavedGamesFailure({required this.error});
+}

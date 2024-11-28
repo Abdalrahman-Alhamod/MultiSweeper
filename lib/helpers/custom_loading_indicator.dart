@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CustomLoadingIndicator extends StatefulWidget {
   const CustomLoadingIndicator({
     super.key,
-    this.color = Colors.blue,
+    this.color = Colors.grey,
     this.size = 50.0,
     this.onComplete,
     this.durationInSeconds = 2,

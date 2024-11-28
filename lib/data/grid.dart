@@ -1,14 +1,8 @@
-import 'package:hive/hive.dart';
 import 'package:minesweeper/data/cell.dart';
 import 'package:minesweeper/data/position.dart';
-part 'grid.g.dart';
 
-@HiveType(typeId: 0)
-class Grid extends HiveObject {
-  @HiveField(0)
+class Grid {
   final List<List<Cell>> _cells;
-
-  @HiveField(1)
   bool revealMines;
 
   Grid(this._cells, this.revealMines);
@@ -25,6 +19,21 @@ class Grid extends HiveObject {
       ),
     );
     return clonedCells;
+  }
+
+  Map<String, dynamic> toJson() => {
+        'cells': _cells
+            .map((row) => row.map((cell) => cell.toJson()).toList())
+            .toList(),
+        'revealMines': revealMines,
+      };
+
+  factory Grid.fromJson(Map<String, dynamic> json) {
+    return Grid(
+      List<List<Cell>>.from(json['cells'].map((row) =>
+          List<Cell>.from(row.map((cellJson) => Cell.fromJson(cellJson))))),
+      json['revealMines'],
+    );
   }
 
   Grid.generate({
