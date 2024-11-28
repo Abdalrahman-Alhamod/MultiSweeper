@@ -1,6 +1,7 @@
-import 'package:minesweeper/data/open_action.dart';
-import 'package:minesweeper/data/position.dart';
+import 'open_action.dart';
+import 'position.dart';
 import 'package:uuid/uuid.dart';
+
 import 'chord_action.dart';
 import 'flag_action.dart';
 import 'game.dart';

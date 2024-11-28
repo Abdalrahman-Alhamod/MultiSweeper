@@ -1,5 +1,5 @@
-import 'package:minesweeper/data/cell.dart';
-import 'package:minesweeper/data/position.dart';
+import 'cell.dart';
+import 'position.dart';
 
 class Grid {
   final List<List<Cell>> _cells;

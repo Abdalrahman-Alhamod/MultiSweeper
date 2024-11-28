@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:minesweeper/helpers/app_font.dart';
+import 'app_font.dart';
 
 class CustomElevatedButton extends StatelessWidget {
   const CustomElevatedButton({

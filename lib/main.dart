@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minesweeper/app.dart';
-import 'package:minesweeper/helpers/custom_bloc_observer.dart';
+import 'app.dart';
+import 'helpers/custom_bloc_observer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late SharedPreferences prefs;
@@ -12,6 +12,6 @@ void main() async {
   prefs = await SharedPreferences.getInstance();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   runApp(
-    const MinesweeperApp(),
+    const MultiSweeperApp(),
   );
 }

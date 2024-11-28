@@ -1,4 +1,4 @@
-import 'package:minesweeper/data/game.dart';
+import 'game.dart';
 
 class GameSave {
   final List<Game> games;

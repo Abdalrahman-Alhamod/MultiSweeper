@@ -1,5 +1,5 @@
-import 'package:minesweeper/data/game.dart';
-import 'package:minesweeper/data/grid_action.dart';
+import 'game.dart';
+import 'grid_action.dart';
 
 import 'cell.dart';
 

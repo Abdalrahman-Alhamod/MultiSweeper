@@ -1,6 +1,6 @@
-import 'package:minesweeper/data/cell_content.dart';
-import 'package:minesweeper/data/cell_status.dart';
-import 'package:minesweeper/data/position.dart';
+import 'cell_content.dart';
+import 'cell_status.dart';
+import 'position.dart';
 
 class Cell {
   int _adjacentMinesCount;

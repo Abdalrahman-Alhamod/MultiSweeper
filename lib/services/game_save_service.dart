@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:minesweeper/data/game_save.dart';
-import 'package:minesweeper/data/grid_action.dart';
+import '../data/game_save.dart';
+import '../data/grid_action.dart';
 
 import '../data/game.dart';
 import '../main.dart';

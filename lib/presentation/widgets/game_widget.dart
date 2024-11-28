@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:minesweeper/presentation/widgets/add_game_widget.dart';
+import 'add_game_widget.dart';
 
 import 'emojie_widget.dart';
 import 'flags_count_widget.dart';

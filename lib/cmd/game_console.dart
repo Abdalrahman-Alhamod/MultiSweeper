@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:minesweeper/data/cell.dart';
+import '../data/cell.dart';
 
 import '../data/grid.dart';
 

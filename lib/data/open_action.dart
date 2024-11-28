@@ -1,4 +1,4 @@
-import 'package:minesweeper/data/grid_action.dart';
+import 'grid_action.dart';
 
 import 'cell.dart';
 import 'game.dart';

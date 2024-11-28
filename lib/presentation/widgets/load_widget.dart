@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:minesweeper/presentation/load_game_view.dart';
+import '../load_game_view.dart';
 
 import '../../helpers/app_font.dart';
 

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minesweeper/data/game_save.dart';
-import 'package:minesweeper/data/grid.dart';
-import 'package:minesweeper/data/grid_action.dart';
-import 'package:minesweeper/services/game_save_service.dart';
+import '../../data/game_save.dart';
+import '../../data/grid.dart';
+import '../../data/grid_action.dart';
+import '../../services/game_save_service.dart';
+
 import '../../data/game.dart';
+
 part 'game_state.dart';
 
 class GameCubit extends Cubit<GameState> {

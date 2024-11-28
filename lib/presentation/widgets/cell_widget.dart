@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minesweeper/business_logic/game_cubit/game_cubit.dart';
-import 'package:minesweeper/data/cell.dart';
-import 'package:minesweeper/data/chord_action.dart';
-import 'package:minesweeper/data/flag_action.dart';
-import 'package:minesweeper/data/open_action.dart';
-import 'package:minesweeper/helpers/app_font.dart';
-import 'package:minesweeper/helpers/app_images.dart';
+import '../../business_logic/game_cubit/game_cubit.dart';
+import '../../data/cell.dart';
+import '../../data/chord_action.dart';
+import '../../data/flag_action.dart';
+import '../../data/open_action.dart';
+import '../../helpers/app_font.dart';
+import '../../helpers/app_images.dart';
 
 // ignore: must_be_immutable
 class CellWidget extends StatelessWidget {

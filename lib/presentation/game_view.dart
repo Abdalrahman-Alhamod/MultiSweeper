@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minesweeper/business_logic/game_cubit/game_cubit.dart';
-import 'package:minesweeper/presentation/widgets/load_widget.dart';
-import 'package:minesweeper/presentation/widgets/save_widget.dart';
+import '../business_logic/game_cubit/game_cubit.dart';
+import 'widgets/load_widget.dart';
+import 'widgets/save_widget.dart';
 
 import 'widgets/game_widget.dart';
 

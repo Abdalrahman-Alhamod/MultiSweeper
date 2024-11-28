@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minesweeper/business_logic/game_cubit/game_cubit.dart';
-import 'package:minesweeper/helpers/logger.dart';
-import 'package:minesweeper/presentation/widgets/cell_widget.dart';
+import '../../business_logic/game_cubit/game_cubit.dart';
+import '../../helpers/logger.dart';
+import 'cell_widget.dart';
 
 class GridWidget extends StatelessWidget {
   const GridWidget({super.key, required this.gameId});

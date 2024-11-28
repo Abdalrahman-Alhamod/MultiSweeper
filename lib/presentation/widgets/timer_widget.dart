@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minesweeper/business_logic/game_cubit/game_cubit.dart';
+import '../../business_logic/game_cubit/game_cubit.dart';
 import 'package:segment_display/segment_display.dart';
 
 class TimerWidget extends StatelessWidget {

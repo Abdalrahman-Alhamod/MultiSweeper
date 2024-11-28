@@ -1,16 +1,68 @@
-# minesweeper
+# Minesweeper 🚩💣
 
-A new Flutter project.
+A modern take on Minesweeper with exciting features and a clean, dynamic interface. Play multiple boards simultaneously, save your progress, and enjoy advanced controls like undo and redo!
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🕹️ **Features**
 
-A few resources to get you started if this is your first Flutter project:
+- **Save and Load Game**: Resume your progress anytime.
+- **Multi-Board Gameplay**: Play on multiple boards with independent timers and flag counters.
+- **Undo/Redo Actions**: Easily revert or repeat your moves for better control.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📸 **Screenshots**
+
+## 📸 **Gallery**
+
+### Screenshots
+
+<table>  
+  <tr>  
+    <td align="center">  
+      <b>Start Screen</b>
+      <br></br> 
+      <img src="screenshots/1.jpg" alt="Start Screen" width="300" height="600">  
+    </td>  
+    <td align="center">  
+      <b>Load Screen</b>
+      <br></br> 
+      <img src="screenshots/2.jpg" alt="Load Screen" width="300" height="600">  
+    </td>  
+  </tr>  
+  <tr>  
+    <td align="center">  
+      <b>Game Started</b>
+      <br></br> 
+      <img src="screenshots/3.jpg" alt="Game Started" width="300" height="600">  
+    </td>  
+    <td align="center">  
+      <b>During Gameplay</b> 
+      <br></br> 
+      <img src="screenshots/4.jpg" alt="During Gameplay" width="300" height="600">  
+    </td>  
+  </tr>  
+  <tr>  
+    <td colspan="2" align="center">  
+      <b>Multiple Boards</b>
+      <br></br> 
+      <img src="screenshots/5.jpg" alt="Multiple Boards" width="600" >  
+    </td>  
+  </tr>  
+</table>  
+ 
+---
+
+## 🚀 **Getting Started**
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/minesweeper.git
+   cd minesweeper
+   ```
+2. Run the app:
+   ```bash
+   flutter pub get
+   flutter run
+   ```

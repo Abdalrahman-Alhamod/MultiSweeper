@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minesweeper/business_logic/game_cubit/game_cubit.dart';
-import 'package:minesweeper/helpers/app_font.dart';
-import 'package:minesweeper/helpers/custom_loading_indicator.dart';
-import 'package:minesweeper/helpers/date_time_helper.dart';
-import 'package:minesweeper/helpers/show_loading_dialog.dart';
-import 'package:minesweeper/presentation/game_view.dart';
+import '../business_logic/game_cubit/game_cubit.dart';
+import '../helpers/app_font.dart';
+import '../helpers/custom_loading_indicator.dart';
+import '../helpers/date_time_helper.dart';
+import '../helpers/show_loading_dialog.dart';
+import 'game_view.dart';
 
 import '../helpers/show_custom_dialog.dart';
 

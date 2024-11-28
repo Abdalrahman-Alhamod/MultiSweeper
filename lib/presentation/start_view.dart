@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minesweeper/business_logic/game_cubit/game_cubit.dart';
-import 'package:minesweeper/helpers/app_images.dart';
-import 'package:minesweeper/helpers/custom_elevated_button.dart';
-import 'package:minesweeper/presentation/game_view.dart';
-import 'package:minesweeper/presentation/load_game_view.dart';
+import '../business_logic/game_cubit/game_cubit.dart';
+import '../helpers/app_images.dart';
+import '../helpers/custom_elevated_button.dart';
+import 'game_view.dart';
+import 'load_game_view.dart';
 
 class StartView extends StatelessWidget {
   const StartView({super.key});

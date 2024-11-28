@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:minesweeper/data/grid.dart';
-import 'package:minesweeper/data/grid_action.dart';
-import 'package:minesweeper/data/position.dart';
-import 'package:minesweeper/helpers/stack.dart';
+
+import 'grid.dart';
+import 'grid_action.dart';
+import 'position.dart';
+import '../helpers/stack.dart';
 
 class Game {
   late Grid _grid;
